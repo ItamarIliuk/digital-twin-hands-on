@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercícios · Digital Twin Hands-on</title>
+<meta name="description" content="Four short exercises with the real numbers from the simulated UR10 palletizing cell: imitation learning, how many trials are enough, cycle time and a failure with a fixed address.">
+<meta property="og:title" content="Exercises · Digital Twin Hands-on">
+<meta property="og:image" content="assets/img/cell_isaac_sim.jpg">
+<link rel="icon" href="assets/img/labriot-logo-64.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
+<style>
+.page{padding:40px 0 0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:60px;background:var(--bg);padding:10px 0;z-index:5;border-bottom:1px solid var(--line);margin-bottom:24px}
+.tabs button{font:500 15px Inter,sans-serif;color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.ex{display:grid;gap:18px;max-width:780px;padding-bottom:56px}
+.cab{display:grid;gap:8px}
+.cab p{margin:0;color:var(--muted)}
+.cab p b{color:var(--text)}
+.tempo{font:12px "JetBrains Mono",Consolas,monospace;color:var(--muted)}
+.cartao{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px;min-width:0}
+.cartao h3{margin:0;font-size:17px}
+.cartao p{margin:0}
+.pergunta{border-left:3px solid var(--accent);padding-left:12px;font-weight:600}
+.opcoes{display:grid;gap:8px}
+.opcao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--surface)}
+.opcao input{margin-top:5px;accent-color:var(--amber-fill)}
+.opcao.certa{border-color:var(--green);box-shadow:inset 3px 0 0 var(--green)}
+.opcao.errada{border-color:var(--red);box-shadow:inset 3px 0 0 var(--red)}
+.btn.rev{justify-self:start}
+.resposta{background:var(--amber-soft);border-radius:8px;padding:14px;display:grid;gap:8px}
+.grafico{overflow-x:auto}
+.grafico svg{display:block;width:100%;height:auto;min-width:320px}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
+.legenda span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.tabela{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--line)}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.calc label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.calc input{font:500 17px "JetBrains Mono",Consolas,monospace;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);width:100%}
+.saida{font-size:40px;font-weight:700;color:var(--blue);line-height:1;font-variant-numeric:tabular-nums}
+.fases{display:grid;gap:8px}
+.fase{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.fase .nome{font-weight:500}
+.fase .seg{font:13px "JetBrains Mono",Consolas,monospace;color:var(--muted)}
+.alterna{display:flex;gap:4px;grid-column:1/-1}
+.alterna button{flex:1;font:500 14px Inter,sans-serif;padding:6px 8px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:6px;cursor:pointer}
+.alterna button[aria-pressed="true"].pol{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.alterna button[aria-pressed="true"].rot{background:var(--amber-soft);border-color:var(--brand);color:var(--brand-deep)}
+.soma{display:flex;gap:20px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.soma div{display:grid}
+.soma b{font-size:26px}
+.palete{display:grid;gap:12px}
+.camada{display:grid;gap:6px}
+.camada .rot{font-size:13px;color:var(--muted)}
+.grade{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.slot{border:1px solid var(--line);border-radius:6px;padding:8px 4px;text-align:center;font-variant-numeric:tabular-nums;background:var(--surface);display:grid;gap:2px}
+.slot .k{font:12px "JetBrains Mono",Consolas,monospace;color:var(--muted)}
+.slot .v{font-size:22px;font-weight:700}
+.slot.quente{background:var(--amber-soft);border-color:var(--brand)}
+.slot.quente .v{color:var(--brand-deep)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/img/labriot-logo-64.png" alt="">Digital Twin Hands-on</a>
+    <nav class="links">
+      <a href="./#projeto"><span lang="pt">O projeto</span><span lang="en">The project</span></a>
+      <a href="./#workshop">Workshop</a>
+      <a href="guia.html"><span lang="pt">Mão na massa</span><span lang="en">Hands-on guide</span></a>
+      <a href="exercicios.html" aria-current="page"><span lang="pt">Exercícios</span><span lang="en">Exercises</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-set-lang="pt" aria-pressed="true">PT</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main><div class="wrap">
+<div class="page">
+  <p class="eyebrow"><span lang="pt">Workshop Digital Twin Hands-on</span><span lang="en">Digital Twin Hands-on workshop</span></p>
+  <h1><span lang="pt">Exercícios com os <span class="hl">dados do projeto</span></span><span lang="en">Exercises with the <span class="hl">project data</span></span></h1>
+  <p class="lede" lang="pt">Quatro exercícios curtos, com os números reais do UR10 simulado. Responda antes de abrir a resposta. Nada é enviado: tudo fica no seu aparelho.</p>
+  <p class="lede" lang="en">Four short exercises with the real numbers from the simulated UR10. Answer before opening the solution. Nothing is sent anywhere: everything stays on your device.</p>
+</div>
+
+<div class="tabs" role="tablist" aria-label="Exercícios / Exercises">
+  <button role="tab" id="tab-1" aria-controls="ex-1" aria-selected="true">1 · <span lang="pt">Imitação</span><span lang="en">Imitation</span></button>
+  <button role="tab" id="tab-2" aria-controls="ex-2" aria-selected="false">2 · <span lang="pt">Ensaios</span><span lang="en">Trials</span></button>
+  <button role="tab" id="tab-3" aria-controls="ex-3" aria-selected="false">3 · <span lang="pt">Ciclo</span><span lang="en">Cycle</span></button>
+  <button role="tab" id="tab-4" aria-controls="ex-4" aria-selected="false">4 · <span lang="pt">Endereço</span><span lang="en">Address</span></button>
+</div>
+
+<!-- Exercício 1 -->
+<div class="ex" id="ex-1" role="tabpanel" aria-labelledby="tab-1">
+  <div class="cab">
+    <span class="tempo"><span lang="pt">Exercício 1 · 10 minutos</span><span lang="en">Exercise 1 · 10 minutes</span></span>
+    <h2><span lang="pt">Por que o DAgger ganhou?</span><span lang="en">Why did DAgger win?</span></h2>
+    <p lang="pt">Três alunos com as mesmas entradas (câmera 96 × 96 e juntas) aprenderam com o mesmo professor. O <b>ACT</b> e a <b>CNN clonada</b> viram 200 demonstrações gravadas; o <b>DAgger</b> foi corrigido pelo professor enquanto ele mesmo dirigia.</p>
+    <p lang="en">Three students with the same inputs (96 × 96 camera and joints) learned from the same teacher. <b>ACT</b> and the <b>cloned CNN</b> saw 200 recorded demonstrations; <b>DAgger</b> was corrected by the teacher while driving itself.</p>
+  </div>
+  <div class="cartao">
+    <h3><span lang="pt">Imitação offline × resultado em malha fechada</span><span lang="en">Offline imitation × closed-loop result</span></h3>
+    <div class="grafico" id="graf1"></div>
+    <div class="legenda"><span style="--c: var(--gray-fill)"><span lang="pt">Erro de imitação antes da pega (menor é melhor)</span><span lang="en">Imitation error before the grasp (lower is better)</span></span><span style="--c: var(--blue-fill)"><span lang="pt">Pegou a caixa</span><span lang="en">Picked the box</span></span><span style="--c: var(--amber-fill)"><span lang="pt">Chegou à zona de entrega</span><span lang="en">Reached the drop zone</span></span></div>
+    <div class="tabela"><table>
+      <tr><th><span lang="pt">Aluno</span><span lang="en">Student</span></th><th class="n"><span lang="pt">Erro offline</span><span lang="en">Offline error</span></th><th class="n"><span lang="pt">Pegou</span><span lang="en">Picked</span></th><th class="n"><span lang="pt">Chegou</span><span lang="en">Reached</span></th><th class="n"><span lang="pt">Caixas (3 paletes)</span><span lang="en">Boxes (3 pallets)</span></th></tr>
+      <tr><td><span lang="pt">ACT, 200 demos</span><span lang="en">ACT, 200 demos</span></td><td class="n" data-num="0.21"></td><td class="n" data-num="0.56"></td><td class="n" data-num="0.09"></td><td class="n">9 / 36</td></tr>
+      <tr><td><span lang="pt">CNN clonada, 200 demos</span><span lang="en">Cloned CNN, 200 demos</span></td><td class="n" data-num="0.09"></td><td class="n" data-num="0.97"></td><td class="n" data-num="0.78"></td><td class="n">31 / 36</td></tr>
+      <tr><td><span lang="pt">CNN por DAgger</span><span lang="en">CNN by DAgger</span></td><td class="n" data-num="0.09"></td><td class="n" data-num="1.00"></td><td class="n" data-num="1.00"></td><td class="n">36 / 36</td></tr>
+    </table></div>
+  </div>
+  <div class="cartao">
+    <p class="pergunta" lang="pt">A CNN clonada e a CNN por DAgger imitam o professor igualmente bem (erro 0,09). Por que só uma chega à zona sempre?</p>
+    <p class="pergunta" lang="en">The cloned CNN and the DAgger CNN imitate the teacher equally well (error 0.09). Why does only one always reach the zone?</p>
+    <div class="opcoes" data-certa="c">
+      <label class="opcao"><input type="radio" name="q1" value="a"><span><span lang="pt">A CNN clonada tem menos parâmetros que a do DAgger.</span><span lang="en">The cloned CNN has fewer parameters than the DAgger one.</span></span></label>
+      <label class="opcao"><input type="radio" name="q1" value="b"><span><span lang="pt">200 demonstrações são poucas; com 2.000 o problema some.</span><span lang="en">200 demonstrations are too few; with 2,000 the problem goes away.</span></span></label>
+      <label class="opcao"><input type="radio" name="q1" value="c"><span><span lang="pt">Quando dirige, o aluno clonado sai do caminho do professor e entra em estados que nunca viu; o DAgger treinou justamente nesses estados.</span><span lang="en">When it drives, the cloned student drifts off the teacher's path into states it never saw; DAgger trained precisely in those states.</span></span></label>
+      <label class="opcao"><input type="radio" name="q1" value="d"><span><span lang="pt">O erro offline é medido de forma errada.</span><span lang="en">The offline error is measured the wrong way.</span></span></label>
+    </div>
+    <button class="btn primary rev" data-revela="r1"><span lang="pt">Ver a resposta</span><span lang="en">Show the answer</span></button>
+    <div class="resposta" id="r1" hidden>
+      <p lang="pt"><b>Erro que se acumula.</b> As duas redes são iguais e imitam igualmente bem nos estados das demonstrações. Mas em malha fechada pequenos desvios levam o aluno clonado a situações fora das demos, onde ele não sabe voltar. O DAgger coleta exatamente esses estados e pede ao professor a ação certa ali.</p>
+      <p lang="en"><b>Compounding error.</b> Both networks are identical and imitate equally well in the demonstration states. But in closed loop, small deviations take the cloned student into situations outside the demos, where it does not know how to recover. DAgger collects exactly those states and asks the teacher for the right action there.</p>
+      <p lang="pt">Com mais demonstrações a CNN clonada melhora até 100 demos (chegou 0,20 → 0,78) e depois para de melhorar. O ACT, com a mesma informação, quase não pega a caixa: a arquitetura pesou mais que o algoritmo.</p>
+      <p lang="en">With more demonstrations, the cloned CNN improves up to 100 demos (reached 0.20 → 0.78) and then stops improving. ACT, with the same information, barely picks the box: the architecture mattered more than the algorithm.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Exercício 2 -->
+<div class="ex" id="ex-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <div class="cab">
+    <span class="tempo"><span lang="pt">Exercício 2 · 10 minutos</span><span lang="en">Exercise 2 · 10 minutes</span></span>
+    <h2><span lang="pt">Quantos ensaios bastam?</span><span lang="en">How many trials are enough?</span></h2>
+    <p lang="pt">Uma fábrica pede 99,5 % de sucesso. A demo montou 36 de 36 caixas. Isso prova a meta?</p>
+    <p lang="en">A factory asks for 99.5% success. The demo placed 36 out of 36 boxes. Does that prove the target?</p>
+  </div>
+  <div class="cartao">
+    <p class="pergunta" lang="pt">Antes de calcular: quantos ensaios <b>sem nenhuma falha</b> você acha que são necessários para afirmar 99,5 % com 95 % de confiança?</p>
+    <p class="pergunta" lang="en">Before calculating: how many trials <b>with no failure at all</b> do you think are needed to claim 99.5% with 95% confidence?</p>
+    <div class="opcoes" data-certa="d">
+      <label class="opcao"><input type="radio" name="q2" value="a"><span><span lang="pt">36 — a demo já basta</span><span lang="en">36 — the demo is enough</span></span></label>
+      <label class="opcao"><input type="radio" name="q2" value="b"><span><span lang="pt">Cerca de 100</span><span lang="en">About 100</span></span></label>
+      <label class="opcao"><input type="radio" name="q2" value="c"><span><span lang="pt">Cerca de 200</span><span lang="en">About 200</span></span></label>
+      <label class="opcao"><input type="radio" name="q2" value="d"><span><span lang="pt">Cerca de 600</span><span lang="en">About 600</span></span></label>
+    </div>
+    <button class="btn primary rev" data-revela="r2"><span lang="pt">Ver a resposta</span><span lang="en">Show the answer</span></button>
+    <div class="resposta" id="r2" hidden>
+      <p lang="pt"><b>598 ensaios.</b> Com zero falhas em n ensaios, o limite inferior de 95 % de confiança é 0,05<sup>1/n</sup>. Com 36 caixas, isso dá cerca de 92 %. Na simulação, 640 episódios por política levam minutos — é o que torna a meta verificável.</p>
+      <p lang="en"><b>598 trials.</b> With zero failures in n trials, the 95% lower confidence bound is 0.05<sup>1/n</sup>. With 36 boxes, that is about 92%. In simulation, 640 episodes per policy take minutes — that is what makes the target verifiable.</p>
+    </div>
+  </div>
+  <div class="cartao">
+    <h3><span lang="pt">Calculadora</span><span lang="en">Calculator</span></h3>
+    <div class="calc">
+      <label for="c-n"><span><span lang="pt">Ensaios (n)</span><span lang="en">Trials (n)</span></span><input id="c-n" type="number" min="1" max="100000" value="36" inputmode="numeric"></label>
+      <label for="c-k"><span><span lang="pt">Falhas (k)</span><span lang="en">Failures (k)</span></span><input id="c-k" type="number" min="0" max="100000" value="0" inputmode="numeric"></label>
+      <label for="c-conf"><span><span lang="pt">Confiança (%)</span><span lang="en">Confidence (%)</span></span><input id="c-conf" type="number" min="50" max="99.9" step="0.5" value="95" inputmode="decimal"></label>
+    </div>
+    <div><div class="saida" id="c-saida">—</div><small style="color:var(--muted)"><span lang="pt">limite inferior da taxa de sucesso (Clopper-Pearson, unilateral)</span><span lang="en">lower bound of the success rate (one-sided Clopper-Pearson)</span></small></div>
+    <div class="calc">
+      <label for="c-meta"><span><span lang="pt">Meta de sucesso (%)</span><span lang="en">Success target (%)</span></span><input id="c-meta" type="number" min="50" max="99.99" step="0.1" value="99.5" inputmode="decimal"></label>
+    </div>
+    <div><div class="saida" id="c-nmeta">—</div><small style="color:var(--muted)"><span lang="pt">ensaios sem falha necessários para afirmar a meta com a confiança acima</span><span lang="en">failure-free trials needed to claim the target at the confidence above</span></small></div>
+  </div>
+</div>
+
+<!-- Exercício 3 -->
+<div class="ex" id="ex-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+  <div class="cab">
+    <span class="tempo"><span lang="pt">Exercício 3 · 10 minutos</span><span lang="en">Exercise 3 · 10 minutes</span></span>
+    <h2><span lang="pt">Onde vai o tempo de cada caixa?</span><span lang="en">Where does each box's time go?</span></h2>
+    <p lang="pt">No modo bancada (limites reais de velocidade, ventosa realista), cada caixa levava 9,2 s. Abaixo, a média por fase em 36 ciclos. Marque o que depende <b>da política treinada</b> e o que depende <b>do roteiro em volta dela</b> — programa, esteira, IK.</p>
+    <p lang="en">In bench mode (real speed limits, realistic suction cup), each box took 9.2 s. Below, the average per phase over 36 cycles. Mark what depends on <b>the trained policy</b> and what depends on <b>the script around it</b> — program, conveyor, IK.</p>
+  </div>
+  <div class="cartao">
+    <div class="fases" id="fases"></div>
+    <div class="soma" aria-live="polite">
+      <div><span style="color:var(--blue)"><span lang="pt">Política</span><span lang="en">Policy</span></span><b id="s-pol"></b></div>
+      <div><span style="color:var(--brand)"><span lang="pt">Roteiro</span><span lang="en">Script</span></span><b id="s-rot"></b></div>
+      <div><span style="color:var(--muted)"><span lang="pt">Sem marcar</span><span lang="en">Unmarked</span></span><b id="s-nada"></b></div>
+    </div>
+    <p class="pergunta" lang="pt">Quais são os dois maiores desperdícios? Dá para cortá-los sem retreinar?</p>
+    <p class="pergunta" lang="en">What are the two biggest wastes? Can you cut them without retraining?</p>
+    <button class="btn primary rev" data-revela="r3"><span lang="pt">Ver a resposta</span><span lang="en">Show the answer</span></button>
+    <div class="resposta" id="r3" hidden>
+      <p lang="pt"><b>O retorno (2,4 s) e a espera da caixa (1,5 s) eram do roteiro.</b> O retorno eram dois movimentos fixos de 1,2 s, qualquer que fosse a distância; a caixa seguinte só entrava na esteira depois que o braço voltava. Nenhum dos dois precisava de treino.</p>
+      <p lang="en"><b>The return (2.4 s) and the wait for the box (1.5 s) belonged to the script.</b> The return was two fixed 1.2 s moves, whatever the distance; the next box only entered the conveyor after the arm came back. Neither needed training.</p>
+      <p lang="pt">Política: transporte e aproximação. Roteiro: retorno, espera da caixa, pega programada, entrega fina pela IK e soltura.</p>
+      <p lang="en">Policy: transport and approach. Script: return, wait for the box, scripted grasp, final placement by IK, and release.</p>
+      <div class="grafico" id="graf3"></div>
+      <div class="legenda" id="leg3"></div>
+      <p lang="pt">Depois de medir: retorno direto pelo limitador, esteira contínua, entrega fina com ponto de passagem — e só então retreino. De 9,2 para 6,6 s por ciclo nesta medição; com o aluno final, 6,25 s por caixa.</p>
+      <p lang="en">After measuring: direct return through the limiter, continuous conveyor, final placement with a waypoint — and only then retraining. From 9.2 to 6.6 s per cycle in this measurement; with the final student, 6.25 s per box.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Exercício 4 -->
+<div class="ex" id="ex-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+  <div class="cab">
+    <span class="tempo"><span lang="pt">Exercício 4 · 5 minutos</span><span lang="en">Exercise 4 · 5 minutes</span></span>
+    <h2><span lang="pt">A falha tem endereço</span><span lang="en">The failure has an address</span></h2>
+    <p lang="pt">Em parte dos ciclos, o aluno com câmera parava a uns 25 cm da posição e a IK precisava terminar a entrega (o “plano B”). Abaixo, em quantos de 9 paletes isso aconteceu em cada posição do palete.</p>
+    <p lang="en">In some cycles, the camera student stopped about 25 cm from the slot and IK had to finish the placement (the “plan B”). Below, in how many of 9 pallets that happened at each pallet slot.</p>
+  </div>
+  <div class="cartao">
+    <div class="palete" id="palete"></div>
+    <p style="font-size:14px;color:var(--muted)" lang="pt">Na hora da parada, a caixa estava na altura certa, exatamente 25 cm ao lado do destino — a distância de uma posição.</p>
+    <p style="font-size:14px;color:var(--muted)" lang="en">When it stopped, the box was at the right height, exactly 25 cm beside the target — the distance of one slot.</p>
+  </div>
+  <div class="cartao">
+    <p class="pergunta" lang="pt">Qual hipótese você testaria primeiro?</p>
+    <p class="pergunta" lang="en">Which hypothesis would you test first?</p>
+    <div class="opcoes" data-certa="c">
+      <label class="opcao"><input type="radio" name="q4" value="a"><span><span lang="pt">A recompensa do professor não favorece chegar perto da posição.</span><span lang="en">The teacher's reward does not favor getting close to the slot.</span></span></label>
+      <label class="opcao"><input type="radio" name="q4" value="b"><span><span lang="pt">O braço não alcança essas posições (limite de juntas).</span><span lang="en">The arm cannot reach those slots (joint limits).</span></span></label>
+      <label class="opcao"><input type="radio" name="q4" value="c"><span><span lang="pt">O aluno vê algo diferente nessas posições do que via no treino.</span><span lang="en">The student sees something different at those slots than it saw in training.</span></span></label>
+      <label class="opcao"><input type="radio" name="q4" value="d"><span><span lang="pt">É acaso: com mais paletes, se espalha pelas outras posições.</span><span lang="en">It is chance: with more pallets, it spreads to the other slots.</span></span></label>
+    </div>
+    <button class="btn primary rev" data-revela="r4"><span lang="pt">Ver a resposta</span><span lang="en">Show the answer</span></button>
+    <div class="resposta" id="r4" hidden>
+      <p lang="pt"><b>Era a percepção.</b> No treino com câmera, as camadas de baixo eram um bloco liso; na demo, caixas de verdade com frestas. Nas camadas de cima, as frestas levavam o aluno à posição vazia ao lado. A IK alcança as posições, e 9 de 9 em três posições não é acaso.</p>
+      <p lang="en"><b>It was perception.</b> In camera training, the lower layers were a smooth block; in the demo, real boxes with gaps. On the upper layers, the gaps led the student to the empty slot next door. IK reaches the slots, and 9 out of 9 at three slots is not chance.</p>
+      <p lang="pt">Dois testes confirmaram: desenhar a pilha como bloco na demo fez o erro sumir; mostrar caixas no treino fez o aluno antigo errar a zona em 11 % dos episódios. Corrigido treinando o aluno vendo os dois (20 min): plano B de 28 em 108 ciclos para zero.</p>
+      <p lang="en">Two tests confirmed it: drawing the stack as a block in the demo made the error disappear; showing boxes in training made the old student miss the zone in 11% of episodes. Fixed by training the student on both (20 min): plan B went from 28 in 108 cycles to zero.</p>
+      <p lang="pt">A primeira aposta, inclusive a nossa, foi a recompensa. Lição: quando a falha tem endereço fixo, investigue o endereço.</p>
+      <p lang="en">The first guess, ours included, was the reward. Lesson: when a failure has a fixed address, investigate the address.</p>
+    </div>
+  </div>
+</div>
+</div></main>
+
+<footer><div class="wrap">
+  <p lang="pt">Dados: projeto UR10 no Isaac Lab 3.0, LABRIOT, 2026. Simulação de pesquisa; não testado num robô físico.</p>
+  <p lang="en">Data: UR10 project in Isaac Lab 3.0, LABRIOT, 2026. Simulation research; not tested on a physical robot.</p>
+  <p>© 2026 LABRIOT · UTFPR Ponta Grossa · <a href="./">Digital Twin Hands-on</a></p>
+</div></footer>
+
+<script>
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var fmt = function (x, d) { d = d === undefined ? 1 : d; var s = x.toFixed(d); return document.documentElement.lang === "en" ? s : s.replace(".", ","); };
+  var css = function (v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); };
+
+  // abas (#ex1..#ex4 no link)
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function abre(i) {
+    tabs.forEach(function (t, j) {
+      t.setAttribute("aria-selected", j === i ? "true" : "false");
+      document.getElementById(t.getAttribute("aria-controls")).hidden = j !== i;
+    });
+  }
+  tabs.forEach(function (t, i) { t.addEventListener("click", function () { abre(i); try { history.replaceState(null, "", "#ex" + (i + 1)); } catch (e) {} }); });
+  var h = (location.hash || "").match(/^#ex([1-4])$/);
+  if (h) abre(+h[1] - 1);
+
+  // opções e respostas
+  document.querySelectorAll("[data-revela]").forEach(function (b) { b.addEventListener("click", function () {
+    $("#" + b.dataset.revela).hidden = false;
+    var g = b.parentElement.querySelector(".opcoes");
+    if (g) g.querySelectorAll(".opcao").forEach(function (o) {
+      var inp = o.querySelector("input"), v = inp.value;
+      o.classList.toggle("certa", v === g.dataset.certa);
+      o.classList.toggle("errada", inp.checked && v !== g.dataset.certa);
+    });
+    b.hidden = true;
+    if (b.dataset.revela === "r3") desenha3();
+  }); });
+
+  function numeros() { document.querySelectorAll("[data-num]").forEach(function (td) { td.textContent = fmt(+td.dataset.num, 2); }); }
+
+  // gráfico 1
+  function desenha1() {
+    var dados = [
+      { n: "ACT", e: 0.21, p: 0.56, c: 0.09 },
+      { n: L("CNN clonada", "Cloned CNN"), e: 0.09, p: 0.97, c: 0.78 },
+      { n: "DAgger", e: 0.09, p: 1.0, c: 1.0 }
+    ];
+    var W = 640, H = 260, x0 = 40, y0 = 20, ph = 190, gw = (W - x0) / 3;
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + L("Erro offline, pegou e chegou à zona para ACT, CNN clonada e DAgger", "Offline error, picked and reached the zone for ACT, cloned CNN and DAgger") + '">';
+    for (var v = 0; v <= 1.001; v += 0.25) {
+      var y = y0 + ph * (1 - v);
+      s += '<line x1="' + x0 + '" x2="' + W + '" y1="' + y + '" y2="' + y + '" stroke="' + css("--line") + '" stroke-width="1"/>';
+      s += '<text x="' + (x0 - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="' + css("--muted") + '">' + fmt(v, 2) + "</text>";
+    }
+    dados.forEach(function (d, i) {
+      var gx = x0 + i * gw + gw * 0.15, bw = gw * 0.22;
+      [[d.e, "--gray-fill"], [d.p, "--blue-fill"], [d.c, "--amber-fill"]].forEach(function (par, j) {
+        var bh = ph * par[0], x = gx + j * (bw + 4), yy = y0 + ph - bh;
+        s += '<rect x="' + x + '" y="' + yy + '" width="' + bw + '" height="' + bh + '" fill="' + css(par[1]) + '" rx="2"/>';
+        s += '<text x="' + (x + bw / 2) + '" y="' + (yy - 5) + '" text-anchor="middle" font-size="11" fill="' + css("--text") + '">' + fmt(par[0], 2) + "</text>";
+      });
+      s += '<text x="' + (gx + 1.5 * bw + 4) + '" y="' + (H - 14) + '" text-anchor="middle" font-size="13" font-weight="600" fill="' + css("--text") + '">' + d.n + "</text>";
+    });
+    $("#graf1").innerHTML = s + "</svg>";
+  }
+
+  // calculadora (Clopper-Pearson unilateral, bisseção na CDF binomial)
+  function cdfSucessos(n, s, p) {
+    var lt = n * Math.log(p), tot = Math.exp(lt);
+    for (var x = n; x > s; x--) { lt += Math.log(x / (n - x + 1)) + Math.log((1 - p) / p); tot += Math.exp(lt); }
+    return tot;
+  }
+  function limiteInferior(n, k, conf) {
+    var s = n - k, a = 1 - conf;
+    if (s <= 0) return 0;
+    if (k === 0) return Math.pow(a, 1 / n);
+    var lo = 0, hi = 1;
+    for (var i = 0; i < 60; i++) { var m = (lo + hi) / 2; if (cdfSucessos(n, s, m) < a) lo = m; else hi = m; }
+    return lo;
+  }
+  function calcula() {
+    var n = Math.max(1, Math.min(5000, Math.round(+$("#c-n").value || 1)));
+    var k = Math.max(0, Math.min(n, Math.round(+$("#c-k").value || 0)));
+    var conf = Math.min(0.999, Math.max(0.5, (+$("#c-conf").value || 95) / 100));
+    var meta = Math.min(0.9999, Math.max(0.5, (+$("#c-meta").value || 99.5) / 100));
+    $("#c-saida").textContent = fmt(100 * limiteInferior(n, k, conf), 1) + " %";
+    $("#c-nmeta").textContent = Math.ceil(Math.log(1 - conf) / Math.log(meta)).toLocaleString(L("pt-BR", "en-US"));
+  }
+  ["#c-n", "#c-k", "#c-conf", "#c-meta"].forEach(function (s) { $(s).addEventListener("input", calcula); });
+
+  // exercício 3: fases
+  var fases = [
+    { id: "retorno", pt: "Retorno à espera", en: "Return to wait pose", a: 2.42, d: 1.61 },
+    { id: "transporte", pt: "Transporte da caixa", en: "Box transport", a: 2.30, d: 2.02 },
+    { id: "esteira", pt: "Esperando a caixa na esteira", en: "Waiting for the box on the conveyor", a: 1.53, d: 0.19 },
+    { id: "fino", pt: "Entrega fina (IK)", en: "Final placement (IK)", a: 1.46, d: 1.10 },
+    { id: "pega", pt: "Pega programada", en: "Scripted grasp", a: 0.96, d: 1.00 },
+    { id: "soltura", pt: "Soltura", en: "Release", a: 0.43, d: 0.43 },
+    { id: "aprox", pt: "Aproximação da caixa", en: "Approach to the box", a: 0.11, d: 0.24 }
+  ];
+  var escolha = {};
+  function nome(f) { return L(f.pt, f.en); }
+  function montaFases() {
+    var lista = $("#fases");
+    lista.innerHTML = "";
+    fases.forEach(function (f) {
+      var el = document.createElement("div");
+      el.className = "fase";
+      el.innerHTML = '<span class="nome">' + nome(f) + '</span><span class="seg">' + fmt(f.a, 2) + ' s</span>' +
+        '<div class="alterna" role="group" aria-label="' + nome(f) + '">' +
+        '<button type="button" class="pol" aria-pressed="' + (escolha[f.id] === "pol") + '">' + L("Política", "Policy") + '</button>' +
+        '<button type="button" class="rot" aria-pressed="' + (escolha[f.id] === "rot") + '">' + L("Roteiro", "Script") + '</button></div>';
+      el.querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () {
+        var v = b.classList.contains("pol") ? "pol" : "rot";
+        escolha[f.id] = escolha[f.id] === v ? undefined : v;
+        el.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x.classList.contains(escolha[f.id] || "-") ? "true" : "false"); });
+        soma();
+      }); });
+      lista.appendChild(el);
+    });
+  }
+  function soma() {
+    var p = 0, r = 0, n = 0;
+    fases.forEach(function (f) { if (escolha[f.id] === "pol") p += f.a; else if (escolha[f.id] === "rot") r += f.a; else n += f.a; });
+    $("#s-pol").textContent = fmt(p) + " s"; $("#s-rot").textContent = fmt(r) + " s"; $("#s-nada").textContent = fmt(n) + " s";
+  }
+  var cores3 = ["--amber-fill", "--blue-fill", "--gray-fill", "--green", "--red", "--muted", "--blue"];
+  function desenha3() {
+    var W = 640, H = 150, x0 = 70, esc = (W - x0 - 50) / 9.5;
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + L("Ciclo por fase antes (9,2 s) e depois (6,6 s)", "Cycle by phase before (9.2 s) and after (6.6 s)") + '">';
+    [[L("Antes", "Before"), "a", 20], [L("Depois", "After"), "d", 82]].forEach(function (lin) {
+      var x = x0, tot = 0, k = lin[1], y = lin[2];
+      s += '<text x="0" y="' + (y + 30) + '" font-size="14" font-weight="600" fill="' + css("--text") + '">' + lin[0] + "</text>";
+      fases.forEach(function (f, i) {
+        var w = f[k] * esc; tot += f[k];
+        s += '<rect x="' + x + '" y="' + y + '" width="' + Math.max(w - 1.5, 0.5) + '" height="48" fill="' + css(cores3[i]) + '"/>';
+        if (w > 34) s += '<text x="' + (x + w / 2) + '" y="' + (y + 29) + '" text-anchor="middle" font-size="12" fill="' + css("--bg") + '" font-weight="600">' + fmt(f[k]) + "</text>";
+        x += w;
+      });
+      s += '<text x="' + (x + 6) + '" y="' + (y + 30) + '" font-size="14" font-weight="600" fill="' + css("--text") + '">' + fmt(tot) + " s</text>";
+    });
+    $("#graf3").innerHTML = s + "</svg>";
+    $("#leg3").innerHTML = fases.map(function (f, i) { return '<span style="--c: var(' + cores3[i] + ')">' + nome(f) + "</span>"; }).join("");
+  }
+
+  // exercício 4: palete por camada (de cima para baixo)
+  var planoB = [0, 0, 0, 0, 1, 0, 9, 0, 9, 0, 9, 0];
+  function montaPalete() {
+    var nomes = [L("Camada de cima (posições 8–11)", "Top layer (slots 8–11)"), L("Camada do meio (4–7)", "Middle layer (4–7)"), L("Camada de baixo (0–3)", "Bottom layer (0–3)")];
+    var pal = $("#palete");
+    pal.innerHTML = "";
+    [2, 1, 0].forEach(function (c, i) {
+      var d = document.createElement("div");
+      d.className = "camada";
+      var g = "";
+      for (var j = 0; j < 4; j++) {
+        var k = c * 4 + j, v = planoB[k];
+        g += '<div class="slot' + (v >= 5 ? " quente" : "") + '"><span class="k">' + L("pos.", "slot") + " " + k + '</span><span class="v">' + v + "/9</span></div>";
+      }
+      d.innerHTML = '<span class="rot">' + nomes[i] + '</span><div class="grade">' + g + "</div>";
+      pal.appendChild(d);
+    });
+  }
+
+  function tudo() { numeros(); desenha1(); calcula(); montaFases(); soma(); montaPalete(); if (!$("#r3").hidden) desenha3(); }
+  onLang(tudo);
+  tudo();
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", tudo); }
+})();
+</script>
+</body>
+</html>

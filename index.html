@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Twin Hands-on · LABRIOT</title>
+<meta name="description" content="Digital Twin Hands-on: a UR10 palletizing cell that learned the task in NVIDIA Isaac Lab and was transferred to the Universal Robots controller (URSim). Workshop materials. LABRIOT, UTFPR, Brazil.">
+<meta property="og:title" content="Digital Twin Hands-on · LABRIOT">
+<meta property="og:description" content="From a cell in Isaac Sim to the UR controller: a palletizing policy trained in Isaac Lab, plus hands-on workshop materials.">
+<meta property="og:image" content="assets/img/cell_isaac_sim.jpg">
+<link rel="icon" href="assets/img/labriot-logo-64.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/img/labriot-logo-64.png" alt="">Digital Twin Hands-on</a>
+    <nav class="links">
+      <a href="#projeto"><span lang="pt">O projeto</span><span lang="en">The project</span></a>
+      <a href="#workshop">Workshop</a>
+      <a href="guia.html"><span lang="pt">Mão na massa</span><span lang="en">Hands-on guide</span></a>
+      <a href="exercicios.html"><span lang="pt">Exercícios</span><span lang="en">Exercises</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-set-lang="pt" aria-pressed="true">PT</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="hero"><div class="wrap grid">
+  <div>
+    <div class="badges">
+      <span class="badge hl"><span lang="pt">Pesquisa · simulação</span><span lang="en">Research · simulation</span></span>
+      <span class="badge">LABRIOT · UTFPR</span>
+      <span class="badge">NVIDIA Omniverse Ambassador</span>
+      <span class="badge">NVIDIA Inception program</span>
+    </div>
+    <h1><span lang="pt">Da célula no Isaac Sim ao <span class="hl">controlador da UR</span></span><span lang="en">From a cell in Isaac Sim to the <span class="hl">UR controller</span></span></h1>
+    <p class="lede" lang="pt">Uma célula de paletização com um UR10 que aprendeu a tarefa no NVIDIA Isaac Lab, foi validada como uma fábrica validaria e teve os comandos aceitos pelo software oficial do controlador da Universal Robots. Aqui ficam o projeto e os materiais do workshop.</p>
+    <p class="lede" lang="en">A UR10 palletizing cell that learned the task in NVIDIA Isaac Lab, was validated the way a factory would validate it, and had its commands accepted by the official Universal Robots controller software. This page holds the project and the workshop materials.</p>
+    <div class="cta">
+      <a class="btn primary" href="guia.html"><span lang="pt">Mão na massa em casa</span><span lang="en">Hands-on at home</span></a>
+      <a class="btn ghost" href="#video"><span lang="pt">Ver o vídeo</span><span lang="en">Watch the video</span></a>
+    </div>
+  </div>
+  <figure class="shot">
+    <img src="assets/img/cell_isaac_sim.jpg" width="1280" height="720" alt="UR10 robot next to a roller conveyor, with a pallet of twelve stacked cardboard boxes, rendered in NVIDIA Isaac Sim">
+    <figcaption><span lang="pt">A célula do webinar no NVIDIA Isaac Sim, com o palete montado pela política treinada.</span><span lang="en">The webinar cell in NVIDIA Isaac Sim, with the pallet built by the trained policy.</span></figcaption>
+  </figure>
+</div></div>
+
+<section id="projeto"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">O projeto</span><span lang="en">The project</span></p>
+  <h2><span lang="pt">Como a célula aprendeu</span><span lang="en">How the cell learned</span></h2>
+  <p class="sub" lang="pt">Em setembro de 2026, para um webinar da NVIDIA, a célula se movia por pontos de passagem programados. A mesma geometria foi levada para o Isaac Lab, onde o robô passou a aprender a tarefa com os limites de um UR10 real.</p>
+  <p class="sub" lang="en">In September 2026, for an NVIDIA webinar, the cell moved along scripted waypoints. The same geometry went into Isaac Lab, where the robot learned the task under the limits of a real UR10.</p>
+  <div class="flow">
+    <div class="step">
+      <h3><span lang="pt">Um professor por reforço</span><span lang="en">An RL teacher</span></h3>
+      <p lang="pt">Aprende por tentativa e erro em milhares de cópias da célula na GPU, vendo o estado exato de tudo.</p>
+      <p lang="en">Learns by trial and error in thousands of copies of the cell on the GPU, seeing the exact state of everything.</p>
+      <span class="where">Isaac Lab · PhysX</span>
+    </div>
+    <div class="step">
+      <h3><span lang="pt">Um aluno com câmera</span><span lang="en">A student with a camera</span></h3>
+      <p lang="pt">Vê só uma câmera e as próprias juntas, e aprende com o professor corrigindo-o no caminho (DAgger).</p>
+      <p lang="en">Sees only one camera and its own joints, and learns from the teacher correcting it along the way (DAgger).</p>
+      <span class="where"><span lang="pt">render RTX sem o Kit</span><span lang="en">RTX rendering, kit-less</span></span>
+    </div>
+    <div class="step">
+      <h3><span lang="pt">Limites do robô real</span><span lang="en">Real-robot limits</span></h3>
+      <p lang="pt">Aceleração das juntas limitada, ventosa realista e ferramenta abaixo de 1,3 m/s, porque o controlador da UR corta em 1,5 m/s.</p>
+      <p lang="en">Limited joint acceleration, a realistic suction cup and the tool under 1.3 m/s, because the UR controller cuts off at 1.5 m/s.</p>
+      <span class="where"><span lang="pt">no treino</span><span lang="en">in training</span></span>
+    </div>
+    <div class="step">
+      <h3><span lang="pt">ROS 2 e o controlador</span><span lang="en">ROS 2 and the controller</span></h3>
+      <p lang="pt">A política roda em TensorRT num nó ROS 2, com um limitador em C++, e comanda o URSim pelo driver oficial da UR.</p>
+      <p lang="en">The policy runs on TensorRT in a ROS 2 node, with a C++ limiter, and drives URSim through the official UR driver.</p>
+      <span class="where">TensorRT · ROS 2 · URSim</span>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>108/108</b><span lang="pt">caixas em 9 paletes, sem contato do braço</span><span lang="en">boxes over 9 pallets, no arm contact</span></div>
+    <div class="stat"><b><span lang="pt">6,25 s</span><span lang="en">6.25 s</span></b><span lang="pt">por caixa, com os limites reais</span><span lang="en">per box, under the real limits</span></div>
+    <div class="stat"><b>640/640</b><span lang="pt">pegas em 640 episódios</span><span lang="en">grasps in 640 episodes</span></div>
+    <div class="stat"><b>~5 mm</b><span lang="pt">desvio médio da ponta entre a simulação e o URSim</span><span lang="en">mean tool-tip deviation between simulation and URSim</span></div>
+  </div>
+</div></section>
+
+<section id="video"><div class="wrap">
+  <h2><span lang="pt">O mesmo palete, nos dois lados</span><span lang="en">The same pallet, on both sides</span></h2>
+  <p class="sub" lang="pt">À esquerda, a trajetória calculada pela política no Isaac Lab, reproduzida na célula original do webinar. À direita, o controlador da UR (URSim, interface PolyScope) executando os mesmos comandos de junta, sem nenhuma parada de segurança.</p>
+  <p class="sub" lang="en">On the left, the trajectory computed by the policy in Isaac Lab, replayed in the original webinar cell. On the right, the UR controller (URSim, PolyScope interface) executing the same joint commands, with no safety stop.</p>
+  <figure class="shot" lang="pt">
+    <video controls preload="none" playsinline poster="assets/img/poster_pt.jpg" width="1920" height="1080"><source src="assets/video/ur10_celula_ao_controlador_pt.mp4" type="video/mp4"></video>
+    <figcaption>1 min 18 s · Isaac Sim 6.0 · Isaac Lab 3.0 · URSim (CB3)</figcaption>
+  </figure>
+  <figure class="shot" lang="en">
+    <video controls preload="none" playsinline poster="assets/img/poster_en.jpg" width="1920" height="1080"><source src="assets/video/ur10_cell_to_controller_en.mp4" type="video/mp4"></video>
+    <figcaption>1 min 18 s · Isaac Sim 6.0 · Isaac Lab 3.0 · URSim (CB3)</figcaption>
+  </figure>
+</div></section>
+
+<section id="estado"><div class="wrap">
+  <h2><span lang="pt">Onde estamos</span><span lang="en">Where we are</span></h2>
+  <p class="sub" lang="pt">Estado real, atualizado em novembro de 2026. Tudo abaixo foi feito em simulação e no software do controlador; nada ainda rodou num robô físico.</p>
+  <p class="sub" lang="en">Honest status, updated November 2026. Everything below was done in simulation and in the controller software; nothing has run on a physical robot yet.</p>
+  <ul class="roadmap">
+    <li class="done"><span class="dot"></span><div><span lang="pt">Professor por reforço e aluno com câmera treinados no Isaac Lab 3.0, com os limites do UR10 real</span><span lang="en">RL teacher and camera student trained in Isaac Lab 3.0, under the real UR10 limits</span><small lang="pt">Pronto</small><small lang="en">Done</small></div></li>
+    <li class="done"><span class="dot"></span><div><span lang="pt">Política em TensorRT via ROS 2, com o limitador de velocidade em C++</span><span lang="en">Policy on TensorRT through ROS 2, with the C++ speed limiter</span><small lang="pt">Pronto</small><small lang="en">Done</small></div></li>
+    <li class="done"><span class="dot"></span><div><span lang="pt">Palete inteiro executado no URSim pelo driver oficial da UR, sem parada de segurança</span><span lang="en">Full pallet executed in URSim through the official UR driver, with no safety stop</span><small lang="pt">Pronto</small><small lang="en">Done</small></div></li>
+    <li class="done"><span class="dot"></span><div><span lang="pt">Correção aceita no NVIDIA cuRobo (<a href="https://github.com/NVlabs/curobo/pull/727">PR #727</a>), encontrada ao adaptar o modelo do UR10</span><span lang="en">Fix merged into NVIDIA cuRobo (<a href="https://github.com/NVlabs/curobo/pull/727">PR #727</a>), found while adapting the UR10 model</span><small lang="pt">Pronto</small><small lang="en">Done</small></div></li>
+    <li class="doing"><span class="dot"></span><div><span lang="pt">Workshop Digital Twin Hands-on no IA Summit Passo Fundo</span><span lang="en">Digital Twin Hands-on workshop at IA Summit Passo Fundo</span><small lang="pt">27 de novembro de 2026</small><small lang="en">November 27, 2026</small></div></li>
+    <li class="next"><span class="dot"></span><div><span lang="pt">Teste numa bancada física: ventosa e caixas reais, carga no braço, câmera e luz da célula</span><span lang="en">Test on a physical cell: real suction cup and boxes, payload on the arm, real camera and lighting</span><small lang="pt">Próximo</small><small lang="en">Next</small></div></li>
+  </ul>
+</div></section>
+
+<section id="workshop"><div class="wrap">
+  <p class="eyebrow">Workshop</p>
+  <h2>Digital Twin Hands-on</h2>
+  <p class="sub" lang="pt">IA Summit Passo Fundo · 27 de novembro de 2026 · Centro de Eventos da UPF. Como se constrói o gêmeo de uma máquina que já existe, e como saber se ele presta. Os materiais ficam abertos aqui.</p>
+  <p class="sub" lang="en">IA Summit Passo Fundo · November 27, 2026 · UPF Event Center, Brazil. How to build the twin of a machine that already exists, and how to tell whether it is any good. The materials stay open here.</p>
+  <div class="cards two">
+    <a class="card" href="guia.html">
+      <h3><span lang="pt">Mão na massa em casa</span><span lang="en">Hands-on at home</span></h3>
+      <p lang="pt">Os exemplos oficiais do Isaac Sim e do Isaac Lab, na ordem dos blocos do workshop, com comandos prontos e tempos medidos numa RTX de 6 GB. Sem GPU? O guia mostra como rodar na nuvem.</p>
+      <p lang="en">The official Isaac Sim and Isaac Lab examples, in the order of the workshop blocks, with ready-to-copy commands and times measured on a 6 GB RTX laptop. No GPU? The guide shows how to run in the cloud.</p>
+      <span class="go"><span lang="pt">Abrir o guia →</span><span lang="en">Open the guide →</span></span>
+    </a>
+    <a class="card" href="exercicios.html">
+      <h3><span lang="pt">Exercícios com os dados do projeto</span><span lang="en">Exercises with the project data</span></h3>
+      <p lang="pt">Quatro exercícios curtos com os números reais do UR10 simulado: imitação, quantos ensaios bastam, onde vai o tempo do ciclo e uma falha com endereço fixo.</p>
+      <p lang="en">Four short exercises with the real numbers from the simulated UR10: imitation, how many trials are enough, where the cycle time goes, and a failure with a fixed address.</p>
+      <span class="go"><span lang="pt">Abrir os exercícios →</span><span lang="en">Open the exercises →</span></span>
+    </a>
+  </div>
+</div></section>
+
+<section id="tech"><div class="wrap">
+  <h2><span lang="pt">Tecnologia</span><span lang="en">Technology</span></h2>
+  <div class="cards">
+    <div class="card">
+      <h3>NVIDIA</h3>
+      <div class="tags"><span class="tag nv">Isaac Lab 3.0</span><span class="tag nv">Isaac Sim 6.0</span><span class="tag nv">PhysX · ovphysx</span><span class="tag nv">RTX · ovrtx</span><span class="tag nv">Warp</span><span class="tag nv">TensorRT</span><span class="tag nv">cuRobo</span><span class="tag nv">Omniverse · OpenUSD</span></div>
+    </div>
+    <div class="card">
+      <h3><span lang="pt">Robótica</span><span lang="en">Robotics</span></h3>
+      <div class="tags"><span class="tag">ROS 2</span><span class="tag">Universal Robots ROS 2 Driver</span><span class="tag">URSim CB3</span><span class="tag">UR10</span><span class="tag">ros2_control</span></div>
+    </div>
+    <div class="card">
+      <h3><span lang="pt">Aprendizado</span><span lang="en">Learning</span></h3>
+      <div class="tags"><span class="tag">PPO · RSL-RL</span><span class="tag">DAgger</span><span class="tag">PyTorch</span><span class="tag">ONNX</span><span class="tag">Claude Code</span></div>
+    </div>
+  </div>
+  <div class="inception" style="margin-top:20px">
+    <div class="logo-box"><img src="assets/img/labriot-logo-512.png" width="512" height="512" alt="LABRIOT logo"></div>
+    <div class="badge-box"><img src="assets/img/nvidia-inception-program-badge-rgb-for-screen.svg" width="501" height="217" alt="NVIDIA Inception Program"></div>
+    <p lang="pt">O LABRIOT é membro do NVIDIA Inception program. Este trabalho faz parte das atividades da Dra. Itamar Iliuk como NVIDIA Omniverse Ambassador.</p>
+    <p lang="en">LABRIOT is a member of the NVIDIA Inception program. This work is part of Dr. Itamar Iliuk's activities as an NVIDIA Omniverse Ambassador.</p>
+  </div>
+</div></section>
+
+<section id="equipe"><div class="wrap">
+  <h2><span lang="pt">Equipe</span><span lang="en">Team</span></h2>
+  <div class="cards">
+    <div class="card">
+      <h3>LABRIOT · UTFPR</h3>
+      <p lang="pt">Laboratório de Robótica e IoT da Universidade Tecnológica Federal do Paraná (UTFPR), câmpus Ponta Grossa.</p>
+      <p lang="en">Robotics and IoT Laboratory (Laboratório de Robótica e IoT) at the Federal University of Technology – Paraná (UTFPR), Ponta Grossa campus, Brazil.</p>
+    </div>
+    <div class="card">
+      <h3>Itamar Iliuk</h3>
+      <p lang="pt">Professora Associada e <a href="https://developer.nvidia.com/omniverse/community#ix7qxf">NVIDIA Omniverse Ambassador</a>.</p>
+      <p lang="en">Associate Professor and <a href="https://developer.nvidia.com/omniverse/community#ix7qxf">NVIDIA Omniverse Ambassador</a>.</p>
+    </div>
+    <div class="card">
+      <h3><span lang="pt">Projetos relacionados</span><span lang="en">Related projects</span></h3>
+      <p><a href="https://itamariliuk.github.io/icu-guardbot/">ICU-GuardBot</a> · <a href="https://itamariliuk.github.io/igm/">Industrial Gauge Monitor</a></p>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>© 2026 LABRIOT · UTFPR Ponta Grossa</p>
+  <p lang="pt">Trabalho de pesquisa em simulação; não é um produto nem foi testado num robô físico. Ativos 3D da célula: bibliotecas de ativos do NVIDIA Isaac Sim. Universal Robots, UR10, URSim e PolyScope são marcas da Universal Robots A/S; NVIDIA, Isaac, Omniverse e TensorRT são marcas da NVIDIA. Este projeto não é endossado pela NVIDIA nem pela Universal Robots.</p>
+  <p lang="en">Simulation research work; not a product and not tested on a physical robot. Cell 3D assets: NVIDIA Isaac Sim asset libraries. Universal Robots, UR10, URSim and PolyScope are trademarks of Universal Robots A/S; NVIDIA, Isaac, Omniverse and TensorRT are trademarks of NVIDIA. This project is not endorsed by NVIDIA or Universal Robots.</p>
+</div></footer>
+</body>
+</html>

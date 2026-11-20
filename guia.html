@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mão na massa em casa · Digital Twin Hands-on</title>
+<meta name="description" content="Official NVIDIA Isaac Sim and Isaac Lab examples to practice at home or in the cloud (NVIDIA Brev), in the order of the Digital Twin Hands-on workshop. Commands and times measured on a 6 GB RTX laptop.">
+<meta property="og:title" content="Hands-on at home · Digital Twin Hands-on">
+<meta property="og:image" content="assets/img/cell_isaac_sim.jpg">
+<link rel="icon" href="assets/img/labriot-logo-64.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
+<style>
+.page{padding:40px 0 8px}
+.progresso{display:flex;align-items:center;gap:12px;font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted);max-width:560px}
+.barra{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:var(--accent)}
+.lista{display:grid;gap:12px}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;min-width:0}
+.ex>input{width:20px;height:20px;margin:3px 0 0;accent-color:var(--amber-fill)}
+.ex .tit{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.ex .tit label{font-weight:600;cursor:pointer}
+.ex .tempo{font:12px "JetBrains Mono",Consolas,monospace;color:var(--muted);font-variant-numeric:tabular-nums}
+.ex .corpo{grid-column:2;display:grid;gap:10px;min-width:0;font-size:15px}
+.ex .corpo p{margin:0}
+.ex.feito .tit label{text-decoration:line-through;color:var(--muted)}
+.obs{color:var(--muted)}
+.obs b{color:var(--text)}
+.desafio{border-left:3px solid var(--accent);padding-left:12px}
+.liga{color:var(--muted);margin:0 0 20px;max-width:760px}
+.nota{background:var(--blue-soft);border-radius:12px;padding:14px 16px;display:grid;gap:8px;font-size:15px}
+.nota p{margin:0}
+ol.passos{margin:0;padding-left:22px;display:grid;gap:12px;max-width:820px}
+ol.passos li>.cmd{margin-top:8px}
+.tabela{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+h3.mini{font-size:18px;margin:24px 0 8px}
+.prosa{max-width:760px}
+.prosa p{margin:0 0 10px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/img/labriot-logo-64.png" alt="">Digital Twin Hands-on</a>
+    <nav class="links">
+      <a href="./#projeto"><span lang="pt">O projeto</span><span lang="en">The project</span></a>
+      <a href="./#workshop">Workshop</a>
+      <a href="guia.html" aria-current="page"><span lang="pt">Mão na massa</span><span lang="en">Hands-on guide</span></a>
+      <a href="exercicios.html"><span lang="pt">Exercícios</span><span lang="en">Exercises</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-set-lang="pt" aria-pressed="true">PT</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="page"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Workshop Digital Twin Hands-on · para depois</span><span lang="en">Digital Twin Hands-on workshop · for afterwards</span></p>
+  <h1><span lang="pt">Mão na massa <span class="hl">em casa</span></span><span lang="en">Hands-on <span class="hl">at home</span></span></h1>
+  <p class="lede" lang="pt">Os exemplos oficiais do Isaac Sim e do Isaac Lab que reforçam cada bloco do workshop, na mesma ordem. Cada um tem o comando pronto, o tempo que levou num notebook com RTX 4050 de 6 GB e o que observar. Sem GPU em casa? Use a nuvem, no fim da página.</p>
+  <p class="lede" lang="en">The official Isaac Sim and Isaac Lab examples that reinforce each workshop block, in the same order. Each one has the command ready to copy, the time it took on a laptop with a 6 GB RTX 4050, and what to look for. No GPU at home? Use the cloud, at the end of the page.</p>
+  <div class="progresso" aria-live="polite"><div class="barra"><i id="barra"></i></div><span id="contagem"></span></div>
+  <nav class="subnav" aria-label="Seções">
+    <a href="#instalar"><span lang="pt">Instalar</span><span lang="en">Install</span></a><a href="#bloco1">1</a><a href="#bloco2">2</a><a href="#bloco3">3</a><a href="#bloco4">4</a><a href="#nuvem"><span lang="pt">Nuvem</span><span lang="en">Cloud</span></a>
+  </nav>
+</div></div>
+
+<section id="instalar"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Antes de começar</span><span lang="en">Before you start</span></p>
+  <h2><span lang="pt">Escolha o caminho</span><span lang="en">Choose your path</span></h2>
+  <div class="cards two" style="margin:16px 0 28px">
+    <div class="card">
+      <h3><span lang="pt">No seu computador</span><span lang="en">On your computer</span></h3>
+      <ul lang="pt">
+        <li>GPU NVIDIA RTX (série 20 ou mais nova)</li>
+        <li>Driver 580.88+ no Windows 11, ou 580.65+ no Ubuntu 22.04/24.04</li>
+        <li>Isaac Lab sem o Isaac Sim roda em GPUs modestas: tudo aqui rodou com 6 GB</li>
+        <li>O Isaac Sim pede 16 GB de VRAM e 32 GB de RAM para cenas grandes; os exemplos desta página couberam em 6 GB</li>
+      </ul>
+      <ul lang="en">
+        <li>NVIDIA RTX GPU (20 series or newer)</li>
+        <li>Driver 580.88+ on Windows 11, or 580.65+ on Ubuntu 22.04/24.04</li>
+        <li>Isaac Lab without Isaac Sim runs on modest GPUs: everything here ran on 6 GB</li>
+        <li>Isaac Sim asks for 16 GB of VRAM and 32 GB of RAM for large scenes; the examples on this page fit in 6 GB</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span lang="pt">Sem GPU: na nuvem</span><span lang="en">No GPU: in the cloud</span></h3>
+      <ul lang="pt">
+        <li>Uma máquina com GPU alugada por hora na NVIDIA Brev</li>
+        <li>Na faixa de US$ 1 a 2 por hora: uma tarde de estudo custa poucos dólares</li>
+        <li>Rode os treinos longos lá e baixe os vídeos</li>
+        <li><a href="#nuvem">Ver o passo a passo</a></li>
+      </ul>
+      <ul lang="en">
+        <li>A GPU machine rented by the hour on NVIDIA Brev</li>
+        <li>Around US$1–2 per hour: an afternoon of study costs a few dollars</li>
+        <li>Run the long trainings there and download the videos</li>
+        <li><a href="#nuvem">See the step by step</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="prosa">
+  <h3 class="mini">Isaac Lab 3.0</h3>
+  <p lang="pt">No Windows, uma vez, num PowerShell <b>como administrador</b>, libere caminhos longos (exigência da instalação oficial). Depois, num PowerShell comum:</p>
+  <p lang="en">On Windows, once, in an <b>administrator</b> PowerShell, enable long paths (required by the official install). Then, in a regular PowerShell:</p>
+  </div>
+  <div class="cmd">New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force</div>
+  <div class="cmd" style="margin-top:10px">powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+git clone https://github.com/isaac-sim/IsaacLab.git --branch v3.0.0
+cd IsaacLab
+uv run isaaclab list_envs</div>
+  <div class="prosa" style="margin-top:12px">
+  <p lang="pt">No Linux, troque a primeira linha por <code>curl -LsSf https://astral.sh/uv/install.sh | sh</code>. A primeira execução baixa as dependências e demora; as próximas começam em segundos. Todos os comandos do Isaac Lab abaixo rodam de dentro da pasta <code>IsaacLab</code>.</p>
+  <p lang="en">On Linux, replace the first line with <code>curl -LsSf https://astral.sh/uv/install.sh | sh</code>. The first run downloads the dependencies and takes a while; later runs start in seconds. All Isaac Lab commands below run from inside the <code>IsaacLab</code> folder.</p>
+  <h3 class="mini">Isaac Sim 6</h3>
+  <p lang="pt">Baixe e descompacte pela <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/index.html">página de instalação oficial</a>. Os exemplos ficam em <code>standalone_examples</code> e rodam com o Python que vem junto: <code>python.bat</code> no Windows, <code>./python.sh</code> no Linux, de dentro da pasta do Isaac Sim.</p>
+  <p lang="en">Download and unzip it from the <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/index.html">official installation page</a>. The examples live in <code>standalone_examples</code> and run with the bundled Python: <code>python.bat</code> on Windows, <code>./python.sh</code> on Linux, from inside the Isaac Sim folder.</p>
+  </div>
+</div></section>
+
+<section id="bloco1"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Bloco 1 · Isaac Sim</span><span lang="en">Block 1 · Isaac Sim</span></p>
+  <h2><span lang="pt">Montar a cena e o ativo</span><span lang="en">Build the scene and the asset</span></h2>
+  <p class="liga" lang="pt">No workshop: um gêmeo começa por uma cena que a física entende — massa, colisor, junta, escala e pivô.</p>
+  <p class="liga" lang="en">In the workshop: a twin starts with a scene that physics understands — mass, collider, joint, scale and pivot.</p>
+  <div class="lista">
+    <div class="ex"><input type="checkbox" id="e11"><div class="tit"><label for="e11"><span lang="pt">1.1 · Primeira janela</span><span lang="en">1.1 · First window</span></label><span class="tempo">22 s</span></div>
+      <div class="corpo"><div class="cmd">python.bat standalone_examples\api\isaacsim.simulation_app\hello_world.py</div>
+      <p class="obs" lang="pt"><b>Observe:</b> o aplicativo abre, roda 100 passos e fecha. É o esqueleto de todo script: criar o app, montar a cena, avançar o tempo.</p>
+      <p class="obs" lang="en"><b>Look for:</b> the app opens, runs 100 steps and closes. It is the skeleton of every script: create the app, build the scene, step time.</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e12"><div class="tit"><label for="e12"><span lang="pt">1.2 · Um robô na cena</span><span lang="en">1.2 · A robot in the scene</span></label><span class="tempo">39 s</span></div>
+      <div class="corpo"><div class="cmd">python.bat standalone_examples\tutorials\getting_started\getting_started_robot.py</div>
+      <p class="obs" lang="pt"><b>Observe:</b> um braço e um carrinho recebem comandos de junta, e o terminal imprime as posições. Ler o estado das juntas é o que a política faz a cada passo.</p>
+      <p class="obs" lang="en"><b>Look for:</b> an arm and a cart receive joint commands, and the terminal prints the positions. Reading joint state is what the policy does at every step.</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e13"><div class="tit"><label for="e13"><span lang="pt">1.3 · Do URDF ao USD</span><span lang="en">1.3 · From URDF to USD</span></label><span class="tempo">17 s</span></div>
+      <div class="corpo"><div class="cmd">python.bat standalone_examples\api\isaacsim.asset.importer.urdf\urdf_import.py</div>
+      <p class="obs" lang="pt"><b>Observe:</b> o arquivo do fabricante vira um ativo USD com juntas e colisores.</p>
+      <p class="obs" lang="en"><b>Look for:</b> the manufacturer's file becomes a USD asset with joints and colliders.</p>
+      <p class="desafio" lang="pt">Abra o USD gerado e procure os cinco itens da atividade do ativo reprovado: massa, colisor, junta, escala e pivô. Qual deles o importador acertou sozinho?</p>
+      <p class="desafio" lang="en">Open the generated USD and look for the five items from the failed-asset activity: mass, collider, joint, scale and pivot. Which one did the importer get right on its own?</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e14"><div class="tit"><label for="e14"><span lang="pt">1.4 · Esteira com física de contato</span><span lang="en">1.4 · Conveyor with contact physics</span></label><span class="tempo"><span lang="pt">abre em 16 s · feche a janela para sair</span><span lang="en">opens in 16 s · close the window to exit</span></span></div>
+      <div class="corpo"><div class="cmd">cd standalone_examples\conveyor_belt
+..\..\python.bat cb_app.py</div>
+      <p class="obs" lang="pt"><b>Observe:</b> caixas andando por um circuito de esteiras com curvas e rampas. A força de atrito é calculada em cada ponto de contato, na GPU, com o NVIDIA Warp. No workshop, a caixa chega pela esteira até o batente.</p>
+      <p class="obs" lang="en"><b>Look for:</b> boxes riding a conveyor circuit with turns and ramps. The friction force is computed at every contact point, on the GPU, with NVIDIA Warp. In the workshop, the box rides the conveyor up to the end stop.</p></div></div>
+  </div>
+</div></section>
+
+<section id="bloco2"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Bloco 2 · Isaac Lab</span><span lang="en">Block 2 · Isaac Lab</span></p>
+  <h2><span lang="pt">Ensinar por reforço</span><span lang="en">Teach by reinforcement</span></h2>
+  <p class="liga" lang="pt">No workshop: o professor aprende por tentativa e erro em milhares de cópias da célula ao mesmo tempo.</p>
+  <p class="liga" lang="en">In the workshop: the teacher learns by trial and error in thousands of copies of the cell at the same time.</p>
+  <div class="lista">
+    <div class="ex"><input type="checkbox" id="e21"><div class="tit"><label for="e21"><span lang="pt">2.1 · O primeiro treino: Cartpole</span><span lang="en">2.1 · The first training: Cartpole</span></label><span class="tempo"><span lang="pt">50 iterações em 20 s</span><span lang="en">50 iterations in 20 s</span></span></div>
+      <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Cartpole --num_envs 1024 --max_iterations 50
+uv run isaaclab play --rl_library rsl_rl --task Isaac-Cartpole --num_envs 16 --checkpoint latest --viz newton_gl</div>
+      <p class="obs" lang="pt"><b>Observe:</b> no terminal, <code>Mean reward</code> sobe e <code>success_rate</code> chega perto de 1 (aqui deu 0,99). O <code>play</code> abre uma janela com 16 cópias equilibrando a haste com a política treinada; feche para sair.</p>
+      <p class="obs" lang="en"><b>Look for:</b> in the terminal, <code>Mean reward</code> goes up and <code>success_rate</code> gets close to 1 (0.99 here). <code>play</code> opens a window with 16 copies balancing the pole with the trained policy; close it to exit.</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e22"><div class="tit"><label for="e22"><span lang="pt">2.2 · O UR10 alcançando alvos</span><span lang="en">2.2 · The UR10 reaching targets</span></label><span class="tempo"><span lang="pt">0,8 s por iteração · 300 iterações ≈ 4 min</span><span lang="en">0.8 s per iteration · 300 iterations ≈ 4 min</span></span></div>
+      <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Reach-UR10 --num_envs 512 --max_iterations 300
+uv run isaaclab play --rl_library rsl_rl --task Isaac-Reach-UR10 --num_envs 16 --checkpoint latest --viz newton_gl</div>
+      <p class="obs" lang="pt"><b>Observe:</b> o mesmo braço do workshop, sem ventosa nem caixa. A receita completa usa 4096 cópias e 1000 iterações; com 512 cópias e 300 iterações ele já aponta para o alvo.</p>
+      <p class="obs" lang="en"><b>Look for:</b> the same arm as in the workshop, without suction cup or box. The full recipe uses 4096 copies and 1000 iterations; with 512 copies and 300 iterations it already points at the target.</p>
+      <p class="desafio" lang="pt">Rode de novo com <code>--num_envs 128</code> e compare a curva. Menos cópias por iteração aprendem mais devagar? Por quê?</p>
+      <p class="desafio" lang="en">Run it again with <code>--num_envs 128</code> and compare the curve. Do fewer copies per iteration learn more slowly? Why?</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e23"><div class="tit"><label for="e23"><span lang="pt">2.3 · Um quadrúpede aprendendo a andar</span><span lang="en">2.3 · A quadruped learning to walk</span></label><span class="tempo"><span lang="pt">1,9 s por iteração · 300 iterações ≈ 10 min</span><span lang="en">1.9 s per iteration · 300 iterations ≈ 10 min</span></span></div>
+      <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Velocity-Flat-AnymalD --num_envs 1024 --max_iterations 300</div>
+      <p class="obs" lang="pt"><b>Observe:</b> mil robôs caindo e levantando juntos. É a escala paralela que torna o reforço viável: a mesma experiência levaria dias num robô só.</p>
+      <p class="obs" lang="en"><b>Look for:</b> a thousand robots falling and getting up together. Parallel scale is what makes reinforcement learning practical: the same experience would take days on a single robot.</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e24"><div class="tit"><label for="e24"><span lang="pt">2.4 · Pegar um cubo com a Franka</span><span lang="en">2.4 · Lifting a cube with the Franka</span></label><span class="tempo"><span lang="pt">2,6 s por iteração · 500 iterações ≈ 22 min</span><span lang="en">2.6 s per iteration · 500 iterations ≈ 22 min</span></span></div>
+      <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Lift-Franka --num_envs 512 --max_iterations 500</div>
+      <p class="obs" lang="pt"><b>Observe:</b> pegar é bem mais difícil que alcançar. A receita completa usa 4096 cópias e 15 000 iterações (horas); em casa, veja a recompensa começar a subir. O treino inteiro é um bom candidato para a <a href="#nuvem">nuvem</a>.</p>
+      <p class="obs" lang="en"><b>Look for:</b> lifting is much harder than reaching. The full recipe uses 4096 copies and 15,000 iterations (hours); at home, watch the reward start to rise. The full training is a good candidate for the <a href="#nuvem">cloud</a>.</p></div></div>
+
+    <div class="nota">
+      <p><b><span lang="pt">Acompanhe as curvas</span><span lang="en">Follow the curves</span></b></p>
+      <div class="cmd">uv run python -m tensorboard.main --logdir logs/rsl_rl</div>
+      <p lang="pt">Abra o endereço que aparecer no navegador. Cada treino fica numa pasta com data e hora em <code>logs/rsl_rl</code>.</p>
+      <p lang="en">Open the address it prints in your browser. Each training run gets a timestamped folder under <code>logs/rsl_rl</code>.</p>
+    </div>
+
+    <div class="ex"><input type="checkbox" id="e25"><div class="tit"><label for="e25"><span lang="pt">2.5 · Desafio: troque o motor de física</span><span lang="en">2.5 · Challenge: switch the physics engine</span></label><span class="tempo">2 × 20 s</span></div>
+      <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Cartpole --max_iterations 50 physics=newton_mjwarp
+uv run --extra ovphysx isaaclab train --rl_library rsl_rl --task Isaac-Cartpole --max_iterations 50 physics=ovphysx</div>
+      <p class="desafio" lang="pt">No workshop comparamos o PhysX com o MuJoCo-Warp no mesmo braço. Compare aqui os passos por segundo (<code>Steps per second</code>) e a recompensa final dos dois. A política aprendida num motor funciona no outro?</p>
+      <p class="desafio" lang="en">In the workshop we compared PhysX and MuJoCo-Warp on the same arm. Compare the steps per second (<code>Steps per second</code>) and the final reward of both. Does a policy learned in one engine work in the other?</p></div></div>
+  </div>
+</div></section>
+
+<section id="bloco3"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Bloco 3 · Percepção</span><span lang="en">Block 3 · Perception</span></p>
+  <h2><span lang="pt">Aprender a partir da câmera</span><span lang="en">Learning from the camera</span></h2>
+  <p class="liga" lang="pt">No workshop: o aluno vê só uma câmera e as próprias juntas, e aprende com o professor.</p>
+  <p class="liga" lang="en">In the workshop: the student sees only one camera and its own joints, and learns from the teacher.</p>
+  <div class="lista">
+    <div class="ex"><input type="checkbox" id="e31"><div class="tit"><label for="e31"><span lang="pt">3.1 · Cartpole vendo pixels</span><span lang="en">3.1 · Cartpole from pixels</span></label><span class="tempo"><span lang="pt">1 s por iteração com 64 câmeras</span><span lang="en">1 s per iteration with 64 cameras</span></span></div>
+      <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Cartpole-Camera-Direct --num_envs 64 --max_iterations 200</div>
+      <p class="obs" lang="pt"><b>Observe:</b> a mesma tarefa do 2.1, mas a política recebe a imagem em vez da posição e da velocidade da haste.</p>
+      <p class="obs" lang="en"><b>Look for:</b> the same task as 2.1, but the policy receives the image instead of the pole's position and velocity.</p>
+      <p class="desafio" lang="pt">Quantas iterações a mais ela precisa para chegar à recompensa do 2.1? É por isso que, no workshop, o aluno aprende com o professor em vez de começar do zero.</p>
+      <p class="desafio" lang="en">How many more iterations does it need to reach the reward of 2.1? That is why, in the workshop, the student learns from the teacher instead of starting from scratch.</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e32"><div class="tit"><label for="e32"><span lang="pt">3.2 · Muitas câmeras numa imagem só</span><span lang="en">3.2 · Many cameras in a single image</span></label><span class="tempo">20 s</span></div>
+      <div class="corpo"><div class="cmd">python.bat standalone_examples\api\isaacsim.sensors.experimental.rtx\camera_tiled.py</div>
+      <p class="obs" lang="pt"><b>Observe:</b> várias câmeras renderizadas num bloco só. É o truque que permite treinar com câmeras em milhares de cópias sem multiplicar o custo.</p>
+      <p class="obs" lang="en"><b>Look for:</b> several cameras rendered as a single tiled block. It is the trick that lets you train with cameras in thousands of copies without multiplying the cost.</p></div></div>
+  </div>
+</div></section>
+
+<section id="bloco4"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Bloco 4 · Isaac Sim</span><span lang="en">Block 4 · Isaac Sim</span></p>
+  <h2><span lang="pt">Controle clássico e validação</span><span lang="en">Classical control and validation</span></h2>
+  <p class="liga" lang="pt">No workshop: a entrega fina usa cinemática inversa, e "funciona na simulação" só vale depois de medido.</p>
+  <p class="liga" lang="en">In the workshop: the final placement uses inverse kinematics, and "it works in simulation" only counts once it is measured.</p>
+  <div class="lista">
+    <div class="ex"><input type="checkbox" id="e41"><div class="tit"><label for="e41"><span lang="pt">4.1 · UR10 seguindo um alvo (IK)</span><span lang="en">4.1 · UR10 following a target (IK)</span></label><span class="tempo"><span lang="pt">abre em 16 s · feche a janela para sair</span><span lang="en">opens in 16 s · close the window to exit</span></span></div>
+      <div class="corpo"><div class="cmd">python.bat standalone_examples\api\isaacsim.robot.experimental.manipulators\universal_robots\follow_target_with_ik.py</div>
+      <p class="obs" lang="pt"><b>Observe:</b> arraste o cubo-alvo na janela e o UR10 o segue. Nenhum aprendizado: só geometria. É o que ajusta os últimos centímetros da caixa no palete.</p>
+      <p class="obs" lang="en"><b>Look for:</b> drag the target cube in the window and the UR10 follows it. No learning: just geometry. It is what adjusts the last few centimeters of the box on the pallet.</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e42"><div class="tit"><label for="e42"><span lang="pt">4.2 · UR10 empilhando cubos</span><span lang="en">4.2 · UR10 stacking cubes</span></label><span class="tempo">30 s</span></div>
+      <div class="corpo"><div class="cmd">python.bat standalone_examples\api\isaacsim.robot.experimental.manipulators\universal_robots\stacking.py</div>
+      <p class="obs" lang="pt"><b>Observe:</b> uma tarefa de empilhar programada passo a passo, até a mensagem <code>Finished stacking all cubes!</code>.</p>
+      <p class="obs" lang="en"><b>Look for:</b> a stacking task programmed step by step, until the message <code>Finished stacking all cubes!</code>.</p>
+      <p class="desafio" lang="pt">Compare com o 2.2: o programado acerta sempre esta cena, mas o que acontece se o cubo mudar de lugar? A política aprendida foi treinada justamente para isso.</p>
+      <p class="desafio" lang="en">Compare with 2.2: the scripted version always gets this scene right, but what happens if the cube moves? The learned policy was trained precisely for that.</p></div></div>
+
+    <div class="ex"><input type="checkbox" id="e43"><div class="tit"><label for="e43"><span lang="pt">4.3 · Meça antes de acreditar</span><span lang="en">4.3 · Measure before you believe</span></label><span class="tempo">5 min</span></div>
+      <div class="corpo">
+      <p lang="pt">Rode o <code>play</code> do 2.2 e conte, em pelo menos 50 tentativas, quantas chegam ao alvo. Leve o número para a <a href="exercicios.html#ex2">calculadora de confiabilidade do Exercício 2</a>.</p>
+      <p lang="en">Run the <code>play</code> from 2.2 and count, over at least 50 attempts, how many reach the target. Take the number to the <a href="exercicios.html#ex2">reliability calculator in Exercise 2</a>.</p>
+      <p class="desafio" lang="pt">Com 50 de 50, quanto você pode garantir? E quantas tentativas sem falha seriam precisas para afirmar 99 %?</p>
+      <p class="desafio" lang="en">With 50 out of 50, how much can you guarantee? And how many failure-free attempts would you need to claim 99%?</p></div></div>
+  </div>
+</div></section>
+
+<section id="nuvem"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Sem GPU em casa</span><span lang="en">No GPU at home</span></p>
+  <h2><span lang="pt">Rodando na nuvem com a NVIDIA Brev</span><span lang="en">Running in the cloud with NVIDIA Brev</span></h2>
+  <p class="liga" lang="pt">A Brev aluga uma máquina com GPU por hora. Você acessa pelo terminal ou pelo navegador, roda os treinos longos e baixa os resultados.</p>
+  <p class="liga" lang="en">Brev rents a GPU machine by the hour. You reach it from the terminal or the browser, run the long trainings and download the results.</p>
+
+  <div class="notice" style="margin-bottom:24px">
+    <h3><span lang="pt">Apague a máquina quando terminar</span><span lang="en">Delete the machine when you are done</span></h3>
+    <p lang="pt">A cobrança é por hora enquanto a máquina existe. Uma máquina esquecida ligada no fim de semana custa mais do que o estudo inteiro. Ao terminar, baixe o que quiser guardar, apague e confira:</p>
+    <p lang="en">You are billed by the hour while the machine exists. A machine left running over a weekend costs more than the whole study session. When you finish, download what you want to keep, delete it and check:</p>
+    <div class="cmd">brev delete &lt;machine-name&gt;
+brev ls</div>
+    <p lang="pt" style="margin-top:8px">Só encerre quando o <code>brev ls</code> não listar mais a máquina.</p>
+    <p lang="en" style="margin-top:8px">Only stop once <code>brev ls</code> no longer lists the machine.</p>
+  </div>
+
+  <ol class="passos">
+    <li><span lang="pt">Crie a conta em <a href="https://developer.nvidia.com/brev">developer.nvidia.com/brev</a> e cadastre um cartão ou créditos.</span><span lang="en">Create an account at <a href="https://developer.nvidia.com/brev">developer.nvidia.com/brev</a> and add a card or credits.</span></li>
+    <li><span lang="pt">Crie uma máquina com GPU <b>L40S ou L40</b>. Elas têm núcleos de ray tracing, que o Isaac Sim exige; A100 e H100 não têm e custam mais. Em novembro de 2026, uma L40 de 48 GB saía por cerca de US$ 1,06 por hora.</span><span lang="en">Create a machine with an <b>L40S or L40</b> GPU. They have ray-tracing cores, which Isaac Sim requires; A100 and H100 do not, and cost more. In November 2026, a 48 GB L40 cost about US$1.06 per hour.</span></li>
+    <li><span lang="pt">Abra o terminal da máquina (botão de acesso no painel, ou <code>brev shell &lt;nome&gt;</code>) e instale o Isaac Lab com os comandos de Linux:</span><span lang="en">Open the machine's terminal (access button in the console, or <code>brev shell &lt;name&gt;</code>) and install Isaac Lab with the Linux commands:</span>
+      <div class="cmd">curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.bashrc
+git clone https://github.com/isaac-sim/IsaacLab.git --branch v3.0.0
+cd IsaacLab</div></li>
+    <li><span lang="pt">Rode o treino completo, com a receita original, sem janela:</span><span lang="en">Run the full training, with the original recipe, without a window:</span>
+      <div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Reach-UR10
+uv run isaaclab train --rl_library rsl_rl --task Isaac-Lift-Franka --max_iterations 3000</div></li>
+    <li><span lang="pt">Grave um vídeo da política treinada e baixe o MP4 pelo navegador de arquivos da máquina:</span><span lang="en">Record a video of the trained policy and download the MP4 through the machine's file browser:</span>
+      <div class="cmd">uv run --extra video isaaclab play --rl_library rsl_rl --task Isaac-Reach-UR10 --checkpoint latest --video --video_length 200</div></li>
+    <li><span lang="pt">Quer a interface completa do Isaac Sim no navegador? Siga o <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_advanced_cloud_setup_brev.html">guia oficial do Isaac Sim na Brev</a>. Ele abre portas da máquina para a internet: libere só para o seu IP.</span><span lang="en">Want the full Isaac Sim interface in your browser? Follow the <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_advanced_cloud_setup_brev.html">official Isaac Sim on Brev guide</a>. It opens the machine's ports to the internet: allow only your own IP.</span></li>
+    <li><span lang="pt">Terminou? <b>Apague a máquina</b> e confira com <code>brev ls</code>.</span><span lang="en">Done? <b>Delete the machine</b> and check with <code>brev ls</code>.</span></li>
+  </ol>
+</div></section>
+
+<section id="problemas"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Se travar</span><span lang="en">If you get stuck</span></p>
+  <h2><span lang="pt">Problemas comuns</span><span lang="en">Common problems</span></h2>
+  <div class="tabela"><table>
+    <tr><th><span lang="pt">Sintoma</span><span lang="en">Symptom</span></th><th><span lang="pt">O que fazer</span><span lang="en">What to do</span></th></tr>
+    <tr><td><span lang="pt">O Isaac Sim demora muito na primeira vez</span><span lang="en">Isaac Sim takes a long time the first time</span></td><td><span lang="pt">Normal: ele compila os shaders da GPU, o que pode passar de 10 minutos. Das próximas vezes abre em segundos.</span><span lang="en">Normal: it compiles the GPU shaders, which can take over 10 minutes. Later it opens in seconds.</span></td></tr>
+    <tr><td><span lang="pt">Tarefa não encontrada</span><span lang="en">Task not found</span></td><td><span lang="pt">Os nomes mudam entre versões. Liste os disponíveis com <code>uv run isaaclab list_envs</code>.</span><span lang="en">Names change between versions. List the available ones with <code>uv run isaaclab list_envs</code>.</span></td></tr>
+    <tr><td><span lang="pt">Falta de memória da GPU</span><span lang="en">GPU out of memory</span> (<code>out of memory</code>)</td><td><span lang="pt">Diminua o <code>--num_envs</code> pela metade até caber.</span><span lang="en">Halve <code>--num_envs</code> until it fits.</span></td></tr>
+    <tr><td><span lang="pt">Erro de caminho longo no Windows</span><span lang="en">Long-path error on Windows</span></td><td><span lang="pt">Faltou o comando de administrador em <a href="#instalar">Instalar</a>.</span><span lang="en">You skipped the administrator command in <a href="#instalar">Install</a>.</span></td></tr>
+    <tr><td><span lang="pt">O antivírus pede permissão ou trava a execução</span><span lang="en">The antivirus asks for permission or blocks the run</span></td><td><span lang="pt">Permita o Python da pasta do Isaac Lab ou do Isaac Sim e rode de novo.</span><span lang="en">Allow the Python inside the Isaac Lab or Isaac Sim folder and run again.</span></td></tr>
+    <tr><td><span lang="pt">O exemplo do Isaac Sim abre e não fecha</span><span lang="en">The Isaac Sim example opens and does not close</span></td><td><span lang="pt">Alguns são interativos e esperam você fechar a janela.</span><span lang="en">Some are interactive and wait for you to close the window.</span></td></tr>
+  </table></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p lang="pt">Testado em 20/11/2026 num notebook com RTX 4050 de 6 GB, com o Isaac Lab 3.0 e o Isaac Sim 6.0. A versão pública atual é o Isaac Lab 3.0.0, que acompanha o Isaac Sim 6.2: os nomes das tarefas conferem com a documentação oficial, mas, se algum mudar, use <code>list_envs</code>. A receita da Brev segue a documentação da NVIDIA. As marcações ficam salvas só neste navegador.</p>
+  <p lang="en">Tested on 2026-11-20 on a laptop with a 6 GB RTX 4050, with Isaac Lab 3.0 and Isaac Sim 6.0. The current public release is Isaac Lab 3.0.0, paired with Isaac Sim 6.2: the task names match the official documentation, but if one changes, use <code>list_envs</code>. The Brev recipe follows NVIDIA's documentation. Your checkmarks are saved only in this browser.</p>
+  <p>© 2026 LABRIOT · UTFPR Ponta Grossa · <a href="./">Digital Twin Hands-on</a></p>
+</div></footer>
+
+<script>
+(function () {
+  var caixas = Array.prototype.slice.call(document.querySelectorAll('.ex > input[type="checkbox"]'));
+  var CH = "dth-guia";
+  var salvo = {};
+  try { salvo = JSON.parse(localStorage.getItem(CH) || "{}"); } catch (e) { salvo = {}; }
+  function atualiza() {
+    var feitos = caixas.filter(function (c) { return c.checked; }).length;
+    document.getElementById("contagem").textContent = feitos + " " + L("de", "of") + " " + caixas.length + " " + L("feitos", "done");
+    document.getElementById("barra").style.width = (100 * feitos / caixas.length) + "%";
+    caixas.forEach(function (c) { c.closest(".ex").classList.toggle("feito", c.checked); });
+  }
+  caixas.forEach(function (c) {
+    c.checked = !!salvo[c.id];
+    c.addEventListener("change", function () {
+      salvo[c.id] = c.checked;
+      try { localStorage.setItem(CH, JSON.stringify(salvo)); } catch (e) {}
+      atualiza();
+    });
+  });
+  onLang(atualiza);
+  atualiza();
+})();
+</script>
+</body>
+</html>
