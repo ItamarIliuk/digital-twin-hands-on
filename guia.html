@@ -33,6 +33,7 @@
 .nota{background:var(--blue-soft);border-radius:12px;padding:14px 16px;display:grid;gap:8px;font-size:15px}
 .nota p{margin:0}
 ol.passos{margin:0;padding-left:22px;display:grid;gap:12px;max-width:820px}
+ol.passos li{min-width:0}
 ol.passos li>.cmd{margin-top:8px}
 .tabela{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:15px}
@@ -62,13 +63,13 @@ h3.mini{font-size:18px;margin:24px 0 8px}
 
 <main>
 <div class="page"><div class="wrap">
-  <p class="eyebrow"><span lang="pt">Workshop Digital Twin Hands-on · para depois</span><span lang="en">Digital Twin Hands-on workshop · for afterwards</span></p>
+  <p class="eyebrow"><span lang="pt">Workshop Digital Twin Hands-on · durante e depois</span><span lang="en">Digital Twin Hands-on workshop · during and after</span></p>
   <h1><span lang="pt">Mão na massa <span class="hl">em casa</span></span><span lang="en">Hands-on <span class="hl">at home</span></span></h1>
-  <p class="lede" lang="pt">Os exemplos oficiais do Isaac Sim e do Isaac Lab que reforçam cada bloco do workshop, na mesma ordem. Cada um tem o comando pronto, o tempo que levou num notebook com RTX 4050 de 6 GB e o que observar. Sem GPU em casa? Use a nuvem, no fim da página.</p>
-  <p class="lede" lang="en">The official Isaac Sim and Isaac Lab examples that reinforce each workshop block, in the same order. Each one has the command ready to copy, the time it took on a laptop with a 6 GB RTX 4050, and what to look for. No GPU at home? Use the cloud, at the end of the page.</p>
+  <p class="lede" lang="pt">Os exemplos oficiais do Isaac Sim e do Isaac Lab que reforçam cada bloco do workshop, na mesma ordem. Cada um tem o comando pronto, o tempo que levou num notebook com RTX 4050 de 6 GB e o que observar. Sem GPU em casa? Use a nuvem, no fim da página. No workshop rodamos juntos o 2.1, o 2.2 e o 3.1; o resto fica para casa.</p>
+  <p class="lede" lang="en">The official Isaac Sim and Isaac Lab examples that reinforce each workshop block, in the same order. Each one has the command ready to copy, the time it took on a laptop with a 6 GB RTX 4050, and what to look for. No GPU at home? Use the cloud, at the end of the page. In the workshop we run 2.1, 2.2 and 3.1 together; the rest is for home.</p>
   <div class="progresso" aria-live="polite"><div class="barra"><i id="barra"></i></div><span id="contagem"></span></div>
   <nav class="subnav" aria-label="Seções">
-    <a href="#instalar"><span lang="pt">Instalar</span><span lang="en">Install</span></a><a href="#bloco1">1</a><a href="#bloco2">2</a><a href="#bloco3">3</a><a href="#bloco4">4</a><a href="#nuvem"><span lang="pt">Nuvem</span><span lang="en">Cloud</span></a>
+    <a href="#instalar"><span lang="pt">Instalar</span><span lang="en">Install</span></a><a href="#bloco1">1</a><a href="#bloco2">2</a><a href="#bloco3">3</a><a href="#bloco4">4</a><a href="#nuvem"><span lang="pt">Nuvem</span><span lang="en">Cloud</span></a><a href="#termos"><span lang="pt">Termos</span><span lang="en">Terms</span></a>
   </nav>
 </div></div>
 
@@ -167,8 +168,8 @@ uv run isaaclab list_envs</div>
     <div class="ex"><input type="checkbox" id="e21"><div class="tit"><label for="e21"><span lang="pt">2.1 · O primeiro treino: Cartpole</span><span lang="en">2.1 · The first training: Cartpole</span></label><span class="tempo"><span lang="pt">50 iterações em 20 s</span><span lang="en">50 iterations in 20 s</span></span></div>
       <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Cartpole --num_envs 1024 --max_iterations 50
 uv run isaaclab play --rl_library rsl_rl --task Isaac-Cartpole --num_envs 16 --checkpoint latest --viz newton_gl</div>
-      <p class="obs" lang="pt"><b>Observe:</b> no terminal, <code>Mean reward</code> sobe e <code>success_rate</code> chega perto de 1 (aqui deu 0,99). O <code>play</code> abre uma janela com 16 cópias equilibrando a haste com a política treinada; feche para sair.</p>
-      <p class="obs" lang="en"><b>Look for:</b> in the terminal, <code>Mean reward</code> goes up and <code>success_rate</code> gets close to 1 (0.99 here). <code>play</code> opens a window with 16 copies balancing the pole with the trained policy; close it to exit.</p></div></div>
+      <p class="obs" lang="pt"><b>Observe:</b> no terminal, <code>Mean reward</code> sobe e <code>success_rate</code> chega perto de 1 (aqui deu 0,99). O <code>play</code> abre uma janela com 16 cópias equilibrando a haste com a política treinada; feche para sair. <code>--num_envs</code> é quantas cópias da cena treinam juntas na GPU; <code>--max_iterations</code>, quantas rodadas de coleta e ajuste da política (veja os <a href="#termos">termos</a>).</p>
+      <p class="obs" lang="en"><b>Look for:</b> in the terminal, <code>Mean reward</code> goes up and <code>success_rate</code> gets close to 1 (0.99 here). <code>play</code> opens a window with 16 copies balancing the pole with the trained policy; close it to exit. <code>--num_envs</code> is how many copies of the scene train together on the GPU; <code>--max_iterations</code>, how many rounds of collecting experience and updating the policy (see the <a href="#termos">terms</a>).</p></div></div>
 
     <div class="ex"><input type="checkbox" id="e22"><div class="tit"><label for="e22"><span lang="pt">2.2 · O UR10 alcançando alvos</span><span lang="en">2.2 · The UR10 reaching targets</span></label><span class="tempo"><span lang="pt">0,8 s por iteração · 300 iterações ≈ 4 min</span><span lang="en">0.8 s per iteration · 300 iterations ≈ 4 min</span></span></div>
       <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Reach-UR10 --num_envs 512 --max_iterations 300
@@ -282,6 +283,27 @@ uv run isaaclab train --rl_library rsl_rl --task Isaac-Lift-Franka --max_iterati
     <li><span lang="pt">Quer a interface completa do Isaac Sim no navegador? Siga o <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_advanced_cloud_setup_brev.html">guia oficial do Isaac Sim na Brev</a>. Ele abre portas da máquina para a internet: libere só para o seu IP.</span><span lang="en">Want the full Isaac Sim interface in your browser? Follow the <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_advanced_cloud_setup_brev.html">official Isaac Sim on Brev guide</a>. It opens the machine's ports to the internet: allow only your own IP.</span></li>
     <li><span lang="pt">Terminou? <b>Apague a máquina</b> e confira com <code>brev ls</code>.</span><span lang="en">Done? <b>Delete the machine</b> and check with <code>brev ls</code>.</span></li>
   </ol>
+</div></section>
+
+<section id="termos"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Para não se perder</span><span lang="en">So you do not get lost</span></p>
+  <h2><span lang="pt">Termos que aparecem nos slides</span><span lang="en">Terms used in the slides</span></h2>
+  <div class="tabela"><table>
+    <tr><th><span lang="pt">Termo</span><span lang="en">Term</span></th><th><span lang="pt">O que quer dizer</span><span lang="en">What it means</span></th></tr>
+    <tr><td><span lang="pt">Política</span><span lang="en">Policy</span></td><td><span lang="pt">A rede neural que decide, a cada instante, o próximo movimento do robô. No workshop, professor e aluno são duas políticas.</span><span lang="en">The neural network that decides, at every instant, the robot's next move. In the workshop, teacher and student are two policies.</span></td></tr>
+    <tr><td><span lang="pt">Professor</span><span lang="en">Teacher</span></td><td><span lang="pt">Política treinada por reforço que vê o estado exato da célula (posições, velocidades, destino), sem câmera.</span><span lang="en">Policy trained by reinforcement that sees the exact state of the cell (positions, velocities, target), without a camera.</span></td></tr>
+    <tr><td><span lang="pt">Aluno</span><span lang="en">Student</span></td><td><span lang="pt">Política que vê só a câmera e as próprias juntas, como um robô real veria. Aprende com o professor.</span><span lang="en">Policy that only sees the camera and its own joints, as a real robot would. It learns from the teacher.</span></td></tr>
+    <tr><td><span lang="pt">Aprendizado por reforço (PPO)</span><span lang="en">Reinforcement learning (PPO)</span></td><td><span lang="pt">Aprender por tentativa e erro guiado por uma recompensa. O PPO é o algoritmo usado; <code>rsl_rl</code> é a biblioteca que o implementa.</span><span lang="en">Learning by trial and error guided by a reward. PPO is the algorithm used; <code>rsl_rl</code> is the library that implements it.</span></td></tr>
+    <tr><td><span lang="pt">Clonagem de comportamento</span><span lang="en">Behavior cloning</span></td><td><span lang="pt">O aluno só copia as demonstrações do professor. Quando sai do caminho perfeito, não sabe voltar.</span><span lang="en">The student only copies the teacher's demonstrations. When it leaves the perfect path, it does not know how to get back.</span></td></tr>
+    <tr><td><span lang="pt">DAgger</span><span lang="en">DAgger</span></td><td><span lang="pt"><i>Dataset Aggregation</i>: o aluno dirige, o professor rotula cada situação que ele visitou, e esses exemplos se somam ao treino a cada rodada. Ross, Gordon e Bagnell, 2011.</span><span lang="en"><i>Dataset Aggregation</i>: the student drives, the teacher labels every situation it visited, and those examples are added to training each round. Ross, Gordon and Bagnell, 2011.</span></td></tr>
+    <tr><td><span lang="pt">ACT</span><span lang="en">ACT</span></td><td><span lang="pt"><i>Action Chunking with Transformers</i>: um transformer que aprende só copiando demonstrações e prevê blocos de ações de uma vez. É a política de referência do LeRobot, da Hugging Face. Zhao e colegas, 2023.</span><span lang="en"><i>Action Chunking with Transformers</i>: a transformer that learns only by copying demonstrations and predicts chunks of actions at once. It is the reference policy in Hugging Face's LeRobot. Zhao et al., 2023.</span></td></tr>
+    <tr><td><span lang="pt"><code>--num_envs</code></span><span lang="en"><code>--num_envs</code></span></td><td><span lang="pt">Quantas cópias da cena treinam juntas na GPU. Se faltar memória, diminua pela metade.</span><span lang="en">How many copies of the scene train together on the GPU. If memory runs out, halve it.</span></td></tr>
+    <tr><td><span lang="pt"><code>--max_iterations</code></span><span lang="en"><code>--max_iterations</code></span></td><td><span lang="pt">Quantas rodadas de coleta de experiência e ajuste da política.</span><span lang="en">How many rounds of collecting experience and updating the policy.</span></td></tr>
+    <tr><td><span lang="pt">Kit</span><span lang="en">Kit</span></td><td><span lang="pt">O aplicativo completo do Isaac Sim, com janela e editor. No treino do workshop usamos só três partes dele como bibliotecas: física (ovphysx), imagem (ovrtx) e cena (ovstage).</span><span lang="en">The full Isaac Sim application, with window and editor. Workshop training uses only three parts of it as libraries: physics (ovphysx), rendering (ovrtx) and scene (ovstage).</span></td></tr>
+    <tr><td><span lang="pt">OpenUSD</span><span lang="en">OpenUSD</span></td><td><span lang="pt">O formato de cena do Omniverse: geometria, materiais, juntas e física num arquivo só.</span><span lang="en">Omniverse's scene format: geometry, materials, joints and physics in a single file.</span></td></tr>
+    <tr><td><span lang="pt">IK (cinemática inversa)</span><span lang="en">IK (inverse kinematics)</span></td><td><span lang="pt">Calcula os ângulos das juntas para a ponta chegar a um ponto. Sem aprendizado, só geometria. No projeto, faz a entrega fina da caixa.</span><span lang="en">Computes the joint angles that put the tool at a point. No learning, just geometry. In the project it does the fine placement of the box.</span></td></tr>
+    <tr><td><span lang="pt">Plano B</span><span lang="en">Plan B</span></td><td><span lang="pt">No projeto: quando o aluno para antes da hora, o IK termina a entrega.</span><span lang="en">In the project: when the student stops short, IK finishes the placement.</span></td></tr>
+  </table></div>
 </div></section>
 
 <section id="problemas"><div class="wrap">
