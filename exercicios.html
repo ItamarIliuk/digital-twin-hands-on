@@ -89,8 +89,8 @@ td.n,th.n{text-align:right}
 <div class="page">
   <p class="eyebrow"><span lang="pt">Workshop Digital Twin Hands-on</span><span lang="en">Digital Twin Hands-on workshop</span></p>
   <h1><span lang="pt">Exercícios com os <span class="hl">dados do projeto</span></span><span lang="en">Exercises with the <span class="hl">project data</span></span></h1>
-  <p class="lede" lang="pt">Quatro exercícios curtos, com os números reais do UR10 simulado. Responda antes de abrir a resposta. Nada é enviado: tudo fica no seu aparelho.</p>
-  <p class="lede" lang="en">Four short exercises with the real numbers from the simulated UR10. Answer before opening the solution. Nothing is sent anywhere: everything stays on your device.</p>
+  <p class="lede" lang="pt">Quatro exercícios curtos, com os números reais do UR10 simulado. Responda antes de abrir a resposta. Nada é enviado: tudo fica no seu aparelho. No workshop, o exercício 2 é feito no celular e os outros viram perguntas à plateia. Termos como política, DAgger e ACT estão explicados no <a href="guia.html#termos">guia</a>.</p>
+  <p class="lede" lang="en">Four short exercises with the real numbers from the simulated UR10. Answer before opening the solution. Nothing is sent anywhere: everything stays on your device. In the workshop, exercise 2 is done on the phone and the others become questions for the audience. Terms such as policy, DAgger and ACT are explained in the <a href="guia.html#termos">guide</a>.</p>
 </div>
 
 <div class="tabs" role="tablist" aria-label="Exercícios / Exercises">
@@ -132,8 +132,8 @@ td.n,th.n{text-align:right}
     <div class="resposta" id="r1" hidden>
       <p lang="pt"><b>Erro que se acumula.</b> As duas redes são iguais e imitam igualmente bem nos estados das demonstrações. Mas em malha fechada pequenos desvios levam o aluno clonado a situações fora das demos, onde ele não sabe voltar. O DAgger coleta exatamente esses estados e pede ao professor a ação certa ali.</p>
       <p lang="en"><b>Compounding error.</b> Both networks are identical and imitate equally well in the demonstration states. But in closed loop, small deviations take the cloned student into situations outside the demos, where it does not know how to recover. DAgger collects exactly those states and asks the teacher for the right action there.</p>
-      <p lang="pt">Com mais demonstrações a CNN clonada melhora até 100 demos (chegou 0,20 → 0,78) e depois para de melhorar. O ACT, com a mesma informação, quase não pega a caixa: a arquitetura pesou mais que o algoritmo.</p>
-      <p lang="en">With more demonstrations, the cloned CNN improves up to 100 demos (reached 0.20 → 0.78) and then stops improving. ACT, with the same information, barely picks the box: the architecture mattered more than the algorithm.</p>
+      <p lang="pt">Com mais demonstrações a CNN clonada melhora até 100 demos (chegou 0,20 → 0,78) e depois para de melhorar. O ACT, com a mesma informação, pega a caixa em pouco mais da metade das vezes (56 %) e só chega à zona em 9 %: a arquitetura pesou mais que o algoritmo.</p>
+      <p lang="en">With more demonstrations, the cloned CNN improves up to 100 demos (reached 0.20 → 0.78) and then stops improving. ACT, with the same information, picks the box only a little over half the time (56%) and reaches the zone in just 9%: the architecture mattered more than the algorithm.</p>
     </div>
   </div>
 </div>
@@ -233,8 +233,8 @@ td.n,th.n{text-align:right}
     <div class="resposta" id="r4" hidden>
       <p lang="pt"><b>Era a percepção.</b> No treino com câmera, as camadas de baixo eram um bloco liso; na demo, caixas de verdade com frestas. Nas camadas de cima, as frestas levavam o aluno à posição vazia ao lado. A IK alcança as posições, e 9 de 9 em três posições não é acaso.</p>
       <p lang="en"><b>It was perception.</b> In camera training, the lower layers were a smooth block; in the demo, real boxes with gaps. On the upper layers, the gaps led the student to the empty slot next door. IK reaches the slots, and 9 out of 9 at three slots is not chance.</p>
-      <p lang="pt">Dois testes confirmaram: desenhar a pilha como bloco na demo fez o erro sumir; mostrar caixas no treino fez o aluno antigo errar a zona em 11 % dos episódios. Corrigido treinando o aluno vendo os dois (20 min): plano B de 28 em 108 ciclos para zero.</p>
-      <p lang="en">Two tests confirmed it: drawing the stack as a block in the demo made the error disappear; showing boxes in training made the old student miss the zone in 11% of episodes. Fixed by training the student on both (20 min): plan B went from 28 in 108 cycles to zero.</p>
+      <p lang="pt">Dois testes confirmaram: desenhar a pilha como bloco na demo fez o erro sumir; mostrar caixas no treino fez o aluno antigo errar a zona em 11 % dos episódios. Corrigido treinando o aluno vendo as duas versões da pilha, metade do tempo cada (20 min): plano B de 28 em 108 ciclos para zero.</p>
+      <p lang="en">Two tests confirmed it: drawing the stack as a block in the demo made the error disappear; showing boxes in training made the old student miss the zone in 11% of episodes. Fixed by training the student on both versions of the stack, half the time each (20 min): plan B went from 28 in 108 cycles to zero.</p>
       <p lang="pt">A primeira aposta, inclusive a nossa, foi a recompensa. Lição: quando a falha tem endereço fixo, investigue o endereço.</p>
       <p lang="en">The first guess, ours included, was the reward. Lesson: when a failure has a fixed address, investigate the address.</p>
     </div>
