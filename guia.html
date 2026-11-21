@@ -209,10 +209,10 @@ uv run --extra ovphysx isaaclab train --rl_library rsl_rl --task Isaac-Cartpole 
   <p class="liga" lang="pt">No workshop: o aluno vê só uma câmera e as próprias juntas, e aprende com o professor.</p>
   <p class="liga" lang="en">In the workshop: the student sees only one camera and its own joints, and learns from the teacher.</p>
   <div class="lista">
-    <div class="ex"><input type="checkbox" id="e31"><div class="tit"><label for="e31"><span lang="pt">3.1 · Cartpole vendo pixels</span><span lang="en">3.1 · Cartpole from pixels</span></label><span class="tempo"><span lang="pt">1 s por iteração com 64 câmeras</span><span lang="en">1 s per iteration with 64 cameras</span></span></div>
+    <div class="ex"><input type="checkbox" id="e31"><div class="tit"><label for="e31"><span lang="pt">3.1 · Cartpole vendo pixels</span><span lang="en">3.1 · Cartpole from pixels</span></label><span class="tempo"><span lang="pt">200 iterações ≈ 3 min com 64 câmeras</span><span lang="en">200 iterations ≈ 3 min with 64 cameras</span></span></div>
       <div class="corpo"><div class="cmd">uv run isaaclab train --rl_library rsl_rl --task Isaac-Cartpole-Camera-Direct --num_envs 64 --max_iterations 200</div>
-      <p class="obs" lang="pt"><b>Observe:</b> a mesma tarefa do 2.1, mas a política recebe a imagem em vez da posição e da velocidade da haste.</p>
-      <p class="obs" lang="en"><b>Look for:</b> the same task as 2.1, but the policy receives the image instead of the pole's position and velocity.</p>
+      <p class="obs" lang="pt"><b>Observe:</b> a mesma tarefa do 2.1, mas a política recebe a imagem em vez da posição e da velocidade da haste. Não se assuste com o começo: a <i>Mean reward</i> fica negativa nas primeiras 16 iterações (chegou a −7,7) antes de subir. Por volta da iteração 70 o episódio já dura o máximo (300 passos), e a recompensa termina perto de 4,95.</p>
+      <p class="obs" lang="en"><b>Look for:</b> the same task as 2.1, but the policy receives the image instead of the pole's position and velocity. Don't worry about the start: the <i>Mean reward</i> stays negative for the first 16 iterations (it went down to −7.7) before climbing. Around iteration 70 the episode already lasts the maximum (300 steps), and the reward ends near 4.95.</p>
       <p class="desafio" lang="pt">Quantas iterações a mais ela precisa para chegar à recompensa do 2.1? É por isso que, no workshop, o aluno aprende com o professor em vez de começar do zero.</p>
       <p class="desafio" lang="en">How many more iterations does it need to reach the reward of 2.1? That is why, in the workshop, the student learns from the teacher instead of starting from scratch.</p></div></div>
 
