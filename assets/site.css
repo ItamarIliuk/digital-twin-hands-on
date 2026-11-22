@@ -81,7 +81,10 @@ h3{text-wrap:balance}
 
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .cards.two{grid-template-columns:repeat(2,1fr)}
+.cards.four{grid-template-columns:repeat(4,1fr)}
+@media (max-width:960px){.cards.four{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:860px){.cards,.cards.two{grid-template-columns:1fr}}
+@media (max-width:520px){.cards.four{grid-template-columns:1fr}}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;min-width:0}
 .card h3{margin:0 0 6px;font-size:17px}
 .card p,.card li{color:var(--muted);font-size:15px}
