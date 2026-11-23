@@ -69,7 +69,7 @@ h3.mini{font-size:18px;margin:24px 0 8px}
   <p class="lede" lang="en">The official Isaac Sim and Isaac Lab examples that reinforce each workshop block, in the same order. Each one has the command ready to copy, the time it took on a laptop with a 6 GB RTX 4050, and what to look for. No GPU at home? Use the cloud, at the end of the page. In the workshop we run 2.1, 2.2 and 3.1 together; the rest is for home.</p>
   <div class="progresso" aria-live="polite"><div class="barra"><i id="barra"></i></div><span id="contagem"></span></div>
   <nav class="subnav" aria-label="Seções">
-    <a href="#instalar"><span lang="pt">Instalar</span><span lang="en">Install</span></a><a href="#bloco1">1</a><a href="#bloco2">2</a><a href="#bloco3">3</a><a href="#bloco4">4</a><a href="#nuvem"><span lang="pt">Nuvem</span><span lang="en">Cloud</span></a><a href="#termos"><span lang="pt">Termos</span><span lang="en">Terms</span></a>
+    <a href="#instalar"><span lang="pt">Instalar</span><span lang="en">Install</span></a><a href="#bloco1">1</a><a href="#bloco2">2</a><a href="#bloco3">3</a><a href="#bloco4">4</a><a href="#proximo"><span lang="pt">Próximo passo</span><span lang="en">Next step</span></a><a href="#nuvem"><span lang="pt">Nuvem</span><span lang="en">Cloud</span></a><a href="#termos"><span lang="pt">Termos</span><span lang="en">Terms</span></a>
   </nav>
 </div></div>
 
@@ -248,6 +248,69 @@ uv run --extra ovphysx isaaclab train --rl_library rsl_rl --task Isaac-Cartpole 
       <p lang="en">Run the <code>play</code> from 2.2 and count, over at least 50 attempts, how many reach the target. Take the number to the <a href="exercicios.html#ex2">reliability calculator in Exercise 2</a>.</p>
       <p class="desafio" lang="pt">Com 50 de 50, quanto você pode garantir? E quantas tentativas sem falha seriam precisas para afirmar 99 %?</p>
       <p class="desafio" lang="en">With 50 out of 50, how much can you guarantee? And how many failure-free attempts would you need to claim 99%?</p></div></div>
+  </div>
+</div></section>
+
+<section id="proximo"><div class="wrap">
+  <p class="eyebrow"><span lang="pt">Próximo passo · para tentar em casa</span><span lang="en">Next step · to try at home</span></p>
+  <h2><span lang="pt">Um robô móvel com braço: TurtleBot3 Lime</span><span lang="en">A mobile robot with an arm: TurtleBot3 Lime</span></h2>
+  <p class="liga" lang="pt">Gostou do UR10? O próximo passo é montar e controlar um robô completo. São 17 tutoriais de Isaac Sim 6.2 com ROS 2, sempre com o mesmo robô: uma base que anda, um braço com garra, câmera RealSense e LiDAR.</p>
+  <p class="liga" lang="en">Enjoyed the UR10? The next step is to build and control a complete robot. There are 17 Isaac Sim 6.2 tutorials with ROS 2, all with the same robot: a driving base, an arm with a gripper, a RealSense camera and a LiDAR.</p>
+  <div class="cards two" style="margin-top:16px">
+    <div class="card" style="padding:0;overflow:hidden">
+      <img src="assets/img/turtlebot3-lime.jpg" width="1000" height="562" alt="TurtleBot3 Lime in Isaac Sim, a small black mobile base with a green arm, next to a bowl, a mustard bottle and a red cup on a blue tiled floor" style="width:100%;height:auto;display:block">
+      <p style="margin:0;padding:10px 14px;font-size:13px"><span lang="pt">No tutorial 13, o robô acha a banana com YOLO, navega até ela e a põe na tigela. Imagem: projeto turtlebot3-lime-isaac-sim (Apache-2.0).</span><span lang="en">In tutorial 13 the robot finds the banana with YOLO, drives to it and puts it in the bowl. Image: turtlebot3-lime-isaac-sim project (Apache-2.0).</span></p>
+    </div>
+    <div class="card">
+      <h3><span lang="pt">O que você aprende</span><span lang="en">What you learn</span></h3>
+      <ul lang="pt">
+        <li><b>00 a 10, iniciante:</b> importar o robô, dirigir pelo teclado e pelo ROS 2, câmera, LiDAR e detecção de objetos com YOLO</li>
+        <li><b>11 a 16, intermediário:</b> navegação com Nav2, braço com MoveIt 2, pegar e colocar, mapa com SLAM e, no fim, arrumar o quarto guardando três bananas</li>
+        <li>Cada tutorial tem o passo a passo na interface e um script em Python, que confere sozinho se deu certo</li>
+      </ul>
+      <ul lang="en">
+        <li><b>00 to 10, beginner:</b> import the robot, drive it from the keyboard and from ROS 2, camera, LiDAR and object detection with YOLO</li>
+        <li><b>11 to 16, intermediate:</b> navigation with Nav2, the arm with MoveIt 2, pick and place, mapping with SLAM and, at the end, tidying the room by putting away three bananas</li>
+        <li>Each tutorial has a walkthrough in the interface and a Python script that checks by itself whether it worked</li>
+      </ul>
+      <p style="margin-top:12px" lang="pt"><b>Diferente do workshop:</b> aqui não há treino por reforço. O robô é controlado com ROS 2, navegação e planejamento de movimento, o lado "clássico" do Bloco 4 levado a um robô inteiro.</p>
+      <p style="margin-top:12px" lang="en"><b>Unlike the workshop:</b> there is no reinforcement learning here. The robot is controlled with ROS 2, navigation and motion planning, the "classical" side of Block 4 taken to a whole robot.</p>
+    </div>
+  </div>
+
+  <div class="cards two" style="margin-top:14px">
+    <div class="card">
+      <h3><span lang="pt">Antes de clonar, confira</span><span lang="en">Check before you clone</span></h3>
+      <ul lang="pt">
+        <li>Ubuntu 24.04 (não roda no Windows; o 22.04 não foi testado)</li>
+        <li>GPU NVIDIA RTX com <b>12 GB ou mais</b> de VRAM: é mais do que o workshop pediu, e um notebook com 6 GB não basta</li>
+        <li>Cerca de 40 GB livres em disco e Docker instalado</li>
+        <li>Saber usar o terminal do Linux e ler Python; o básico de ROS 2 ajuda</li>
+        <li>Os 17 tutoriais somam umas 9 horas; dá para parar no 10</li>
+      </ul>
+      <ul lang="en">
+        <li>Ubuntu 24.04 (it does not run on Windows; 22.04 is untested)</li>
+        <li>NVIDIA RTX GPU with <b>12 GB or more</b> of VRAM: more than the workshop needed, and a 6 GB laptop is not enough</li>
+        <li>About 40 GB of free disk space and Docker installed</li>
+        <li>Being able to use the Linux terminal and read Python; ROS 2 basics help</li>
+        <li>All 17 tutorials take about 9 hours; you can stop at 10</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span lang="pt">Para começar</span><span lang="en">To get started</span></h3>
+      <div class="cmd">git clone https://github.com/ItamarIliuk/turtlebot3-lime-isaac-sim.git
+cd turtlebot3-lime-isaac-sim
+./scripts/setup_isaacsim.sh
+./docker/run_ros.sh true</div>
+      <p style="margin-top:10px" lang="pt">O primeiro script instala o Isaac Sim 6.2 (uns 24 GB) e o segundo monta o contêiner do ROS 2 Jazzy (uns 15 minutos na primeira vez). Depois, siga o tutorial 00 no site dos tutoriais.</p>
+      <p style="margin-top:10px" lang="en">The first script installs Isaac Sim 6.2 (about 24 GB) and the second builds the ROS 2 Jazzy container (about 15 minutes the first time). Then follow tutorial 00 on the tutorials website.</p>
+      <div class="cta" style="margin-top:12px">
+        <a class="btn primary" href="https://an-robotics.github.io/turtlebot3-lime-isaac-sim/"><span lang="pt">Site dos tutoriais ↗</span><span lang="en">Tutorials website ↗</span></a>
+        <a class="btn ghost" href="https://github.com/ItamarIliuk/turtlebot3-lime-isaac-sim"><span lang="pt">Repositório ↗</span><span lang="en">Repository ↗</span></a>
+      </div>
+      <p style="margin-top:12px;font-size:13px" lang="pt">Projeto original: <a href="https://github.com/an-robotics/turtlebot3-lime-isaac-sim">an-robotics/turtlebot3-lime-isaac-sim</a>, Apache-2.0. O robô vem do TurtleBot3 Lime da ROBOTIS.</p>
+      <p style="margin-top:12px;font-size:13px" lang="en">Original project: <a href="https://github.com/an-robotics/turtlebot3-lime-isaac-sim">an-robotics/turtlebot3-lime-isaac-sim</a>, Apache-2.0. The robot is ROBOTIS's TurtleBot3 Lime.</p>
+    </div>
   </div>
 </div></section>
 
