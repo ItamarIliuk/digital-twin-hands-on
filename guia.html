@@ -123,8 +123,8 @@ uv run isaaclab list_envs</div>
   <p lang="pt">No Linux, troque a primeira linha por <code>curl -LsSf https://astral.sh/uv/install.sh | sh</code>. A primeira execução baixa as dependências e demora; as próximas começam em segundos. Todos os comandos do Isaac Lab abaixo rodam de dentro da pasta <code>IsaacLab</code>.</p>
   <p lang="en">On Linux, replace the first line with <code>curl -LsSf https://astral.sh/uv/install.sh | sh</code>. The first run downloads the dependencies and takes a while; later runs start in seconds. All Isaac Lab commands below run from inside the <code>IsaacLab</code> folder.</p>
   <h3 class="mini">Isaac Sim 6</h3>
-  <p lang="pt">Baixe e descompacte pela <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/index.html">página de instalação oficial</a>. Os exemplos ficam em <code>standalone_examples</code> e rodam com o Python que vem junto: <code>.python.bat</code> no Windows (com o <code>.</code> na frente, que o PowerShell exige), <code>./python.sh</code> no Linux, de dentro da pasta do Isaac Sim (não da pasta do Isaac Lab).</p>
-  <p lang="en">Download and unzip it from the <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/index.html">official installation page</a>. The examples live in <code>standalone_examples</code> and run with the bundled Python: <code>.python.bat</code> on Windows (the leading <code>.</code> is required in PowerShell), <code>./python.sh</code> on Linux, from inside the Isaac Sim folder (not the Isaac Lab folder).</p>
+  <p lang="pt">Baixe e descompacte pela <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/index.html">página de instalação oficial</a>. Os exemplos ficam em <code>standalone_examples</code> e rodam com o Python que vem junto: <code>.\python.bat</code> no Windows (com o <code>.\</code> na frente, que o PowerShell exige), <code>./python.sh</code> no Linux, de dentro da pasta do Isaac Sim (não da pasta do Isaac Lab).</p>
+  <p lang="en">Download and unzip it from the <a href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/index.html">official installation page</a>. The examples live in <code>standalone_examples</code> and run with the bundled Python: <code>.\python.bat</code> on Windows (the leading <code>.\</code> is required in PowerShell), <code>./python.sh</code> on Linux, from inside the Isaac Sim folder (not the Isaac Lab folder).</p>
   </div>
 </div></section>
 
@@ -135,17 +135,17 @@ uv run isaaclab list_envs</div>
   <p class="liga" lang="en">In the workshop: a twin starts with a scene that physics understands — mass, collider, joint, scale and pivot.</p>
   <div class="lista">
     <div class="ex"><input type="checkbox" id="e11"><div class="tit"><label for="e11"><span lang="pt">1.1 · Primeira janela</span><span lang="en">1.1 · First window</span></label><span class="tempo">22 s</span></div>
-      <div class="corpo"><div class="cmd">.python.bat standalone_examples\api\isaacsim.simulation_app\hello_world.py</div>
+      <div class="corpo"><div class="cmd">.\python.bat standalone_examples\api\isaacsim.simulation_app\hello_world.py</div>
       <p class="obs" lang="pt"><b>Observe:</b> o aplicativo abre, roda 100 passos e fecha. É o esqueleto de todo script: criar o app, montar a cena, avançar o tempo.</p>
       <p class="obs" lang="en"><b>Look for:</b> the app opens, runs 100 steps and closes. It is the skeleton of every script: create the app, build the scene, step time.</p></div></div>
 
     <div class="ex"><input type="checkbox" id="e12"><div class="tit"><label for="e12"><span lang="pt">1.2 · Um robô na cena</span><span lang="en">1.2 · A robot in the scene</span></label><span class="tempo">39 s</span></div>
-      <div class="corpo"><div class="cmd">.python.bat standalone_examples\tutorials\getting_started\getting_started_robot.py</div>
+      <div class="corpo"><div class="cmd">.\python.bat standalone_examples\tutorials\getting_started\getting_started_robot.py</div>
       <p class="obs" lang="pt"><b>Observe:</b> um braço e um carrinho recebem comandos de junta, e o terminal imprime as posições. Ler o estado das juntas é o que a política faz a cada passo.</p>
       <p class="obs" lang="en"><b>Look for:</b> an arm and a cart receive joint commands, and the terminal prints the positions. Reading joint state is what the policy does at every step.</p></div></div>
 
     <div class="ex"><input type="checkbox" id="e13"><div class="tit"><label for="e13"><span lang="pt">1.3 · Do URDF ao USD</span><span lang="en">1.3 · From URDF to USD</span></label><span class="tempo">17 s</span></div>
-      <div class="corpo"><div class="cmd">.python.bat standalone_examples\api\isaacsim.asset.importer.urdf\urdf_import.py</div>
+      <div class="corpo"><div class="cmd">.\python.bat standalone_examples\api\isaacsim.asset.importer.urdf\urdf_import.py</div>
       <p class="obs" lang="pt"><b>Observe:</b> o arquivo do fabricante vira um ativo USD com juntas e colisores.</p>
       <p class="obs" lang="en"><b>Look for:</b> the manufacturer's file becomes a USD asset with joints and colliders.</p>
       <p class="desafio" lang="pt">Abra o USD gerado e procure os cinco itens da atividade do ativo reprovado: massa, colisor, junta, escala e pivô. Qual deles o importador acertou sozinho?</p>
@@ -218,7 +218,7 @@ uv run --extra ovphysx isaaclab train --rl_library rsl_rl --task Isaac-Cartpole 
       <p class="desafio" lang="en">How many more iterations does it need to reach the reward of 2.1? That is why, in the workshop, the student learns from the teacher instead of starting from scratch.</p></div></div>
 
     <div class="ex"><input type="checkbox" id="e32"><div class="tit"><label for="e32"><span lang="pt">3.2 · Muitas câmeras numa imagem só</span><span lang="en">3.2 · Many cameras in a single image</span></label><span class="tempo">20 s</span></div>
-      <div class="corpo"><div class="cmd">.python.bat standalone_examples\api\isaacsim.sensors.experimental.rtx\camera_tiled.py</div>
+      <div class="corpo"><div class="cmd">.\python.bat standalone_examples\api\isaacsim.sensors.experimental.rtx\camera_tiled.py</div>
       <p class="obs" lang="pt"><b>Observe:</b> várias câmeras renderizadas num bloco só. É o truque que permite treinar com câmeras em milhares de cópias sem multiplicar o custo.</p>
       <p class="obs" lang="en"><b>Look for:</b> several cameras rendered as a single tiled block. It is the trick that lets you train with cameras in thousands of copies without multiplying the cost.</p></div></div>
   </div>
@@ -231,12 +231,12 @@ uv run --extra ovphysx isaaclab train --rl_library rsl_rl --task Isaac-Cartpole 
   <p class="liga" lang="en">In the workshop: the final placement uses inverse kinematics, and "it works in simulation" only counts once it is measured.</p>
   <div class="lista">
     <div class="ex"><input type="checkbox" id="e41"><div class="tit"><label for="e41"><span lang="pt">4.1 · UR10 seguindo um alvo (IK)</span><span lang="en">4.1 · UR10 following a target (IK)</span></label><span class="tempo"><span lang="pt">abre em 16 s · feche a janela para sair</span><span lang="en">opens in 16 s · close the window to exit</span></span></div>
-      <div class="corpo"><div class="cmd">.python.bat standalone_examples\api\isaacsim.robot.experimental.manipulators\universal_robots\follow_target_with_ik.py</div>
+      <div class="corpo"><div class="cmd">.\python.bat standalone_examples\api\isaacsim.robot.experimental.manipulators\universal_robots\follow_target_with_ik.py</div>
       <p class="obs" lang="pt"><b>Observe:</b> arraste o cubo-alvo na janela e o UR10 o segue. Nenhum aprendizado: só geometria. É o que ajusta os últimos centímetros da caixa no palete.</p>
       <p class="obs" lang="en"><b>Look for:</b> drag the target cube in the window and the UR10 follows it. No learning: just geometry. It is what adjusts the last few centimeters of the box on the pallet.</p></div></div>
 
     <div class="ex"><input type="checkbox" id="e42"><div class="tit"><label for="e42"><span lang="pt">4.2 · UR10 empilhando cubos</span><span lang="en">4.2 · UR10 stacking cubes</span></label><span class="tempo">30 s</span></div>
-      <div class="corpo"><div class="cmd">.python.bat standalone_examples\api\isaacsim.robot.experimental.manipulators\universal_robots\stacking.py</div>
+      <div class="corpo"><div class="cmd">.\python.bat standalone_examples\api\isaacsim.robot.experimental.manipulators\universal_robots\stacking.py</div>
       <p class="obs" lang="pt"><b>Observe:</b> uma tarefa de empilhar programada passo a passo, até a mensagem <code>Finished stacking all cubes!</code>.</p>
       <p class="obs" lang="en"><b>Look for:</b> a stacking task programmed step by step, until the message <code>Finished stacking all cubes!</code>.</p>
       <p class="desafio" lang="pt">Compare com o 2.2: o programado acerta sempre esta cena, mas o que acontece se o cubo mudar de lugar? A política aprendida foi treinada justamente para isso.</p>
